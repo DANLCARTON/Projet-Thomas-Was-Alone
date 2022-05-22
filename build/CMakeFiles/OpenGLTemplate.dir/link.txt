@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/OpenGLTemplate.dir/src/App.cpp.o CMakeFiles/OpenGLTemplate.dir/src/main.cpp.o -o ../bin/OpenGLTemplate  third_party/glfw/src/libglfw3.a libglad.a libstb_image.a /usr/lib/x86_64-linux-gnu/librt.a -lm -ldl 

@@ -1,7 +1,0 @@
-ALORS
-
-Taille de l'écran : 1280x720
-
-Taille du niveau 1 : 1280x720 (niveau tuto)
-Taille du niveau 2 : 6400x720 (niveau défilement horizontal)
-Taille du niveau 3 : 1280x3600 (niveau défilement vertical)
