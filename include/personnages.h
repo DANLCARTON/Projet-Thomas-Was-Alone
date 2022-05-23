@@ -19,12 +19,14 @@ typedef struct perso
 
     //true si on joue se cube là
     int isPlaying;
+    int index; // numero du personnage
 
     ColorRGB color;  
 }Perso;
 
 
-
+Perso createPerso (float px, float py, float vx, float vy, float height, float width, int isPlaying, ColorRGB color, int index);
+void drawPerso(Perso perso);
 void fall (Perso perso, const float dt);
 void jump (Perso perso, const float dt);
 void goRight (Perso perso);

@@ -16,10 +16,22 @@ EXEC_BIN	= twa.out
 
 all : $(OBJ_FILES)
 
+comp : $(OBJ_FILES)
+	@mkdir -p $(BIN_DIR)/
+	$(CC) -o $(BIN_DIR)/$(EXEC_BIN) $(OBJ_FILES) $(LDFLAGS) $(LDFLAGS)
+
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p "$(@D)"
+	$(CC) -c $< -o $@ $(CFLAGS) $(INC_DIR)
+
+exec : $(OBJ_FILES)
+	./$(BIN_DIR)/$(EXEC_BIN)
+
 twa : $(OBJ_FILES)
 	@mkdir -p $(BIN_DIR)/
 	$(CC) -o $(BIN_DIR)/$(EXEC_BIN) $(OBJ_FILES) $(LDFLAGS) $(LDFLAGS)
-	./bin/twa.out
+	./$(BIN_DIR)/$(EXEC_BIN)
 
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c

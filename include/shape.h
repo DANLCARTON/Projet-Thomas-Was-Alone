@@ -3,6 +3,7 @@
 
 #include "geometry.h"
 #include "colors.h"
+#include "personnages.h"
 
 typedef struct Rectangle {
     Point3D position;
@@ -15,14 +16,13 @@ typedef struct Rectangle {
 } Platform, HUD;
 
 typedef struct Goal {
+    Perso perso; // perso rattaché au goal
     Point3D position;
     Vector3D size;
-    ColorRGB color;
-    int index; // même index que le personnage qui y est rattaché
-};
+}Goal;
 
 Platform createPlatform(Point3D pos, Vector3D size);
 Platform createMovingPlatform(Point3D pos, Vector3D size);
-Platform createGoal(Point3D pos, Vector3D size);
+Goal createGoal(Perso perso, Point3D pos, Vector3D size);
 
 #endif

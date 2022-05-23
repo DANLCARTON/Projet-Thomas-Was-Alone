@@ -1,4 +1,39 @@
+#include <SDL2/SDL.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 #include "../include/personnages.h"
+#include "../include/colors.h"
+
+void drawPerso(Perso perso) {
+    glColor3f(perso.color.r, perso.color.g, perso.color.b);
+    glPushMatrix(); // je pense qu'il faudra virer ça après ou peut-être pas en fait
+        glTranslatef(perso.px, perso.py, 0);
+        glScalef(perso.height, perso.width, 1);
+        glBegin(GL_TRIANGLE_FAN);
+            glVertex2f(0, 0);
+            glVertex2f(1, 0);
+            glVertex2f(1, -1);
+            glVertex2f(0, -1);
+            glVertex2f(0, 0);
+        glEnd();
+    glPopMatrix();
+}
+
+Perso createPerso (float px, float py, float vx, float vy, float height, float width, int isPlaying, ColorRGB color, int index) {
+    Perso perso;
+    perso.px = px;
+    perso.py = py;
+    perso.vx = vx;
+    perso.vy = vy;
+    perso.height = height;
+    perso.width = width;
+    perso.isPlaying = isPlaying;
+    perso.color = color;
+    perso.index = index;
+    drawPerso(perso);
+    return perso;
+}
 
 //VARIABLES
 
@@ -31,9 +66,10 @@ void jump(Perso perso, const float dt)
 void goRight(Perso perso)
 {
     if (perso.vx<hVmax)
-    {
+    {   
         perso.vx+=hAcc; //permet une accélération linéaire sur n frames
     }
+    return perso;
 }
 
 void goLeft(Perso perso)

@@ -10,6 +10,7 @@
 #include "../include/geometry.h"
 #include "../include/personnages.h"
 #include "../include/shape.h"
+#include "../include/levels.h"
 
 /* Dimensions initiales et titre de la fenetre */
 static const unsigned int WINDOW_WIDTH = 1280;
@@ -46,6 +47,8 @@ void onWindowResized(unsigned int width, unsigned int height)
         -GL_VIEW_SIZE / 2. / aspectRatio, GL_VIEW_SIZE / 2. / aspectRatio);
     }
 }
+
+int loopcreateperso = 0;
 
 int main(int argc, char** argv) 
 {
@@ -118,7 +121,11 @@ int main(int argc, char** argv)
         /* Recuperation du temps au debut de la boucle */
         Uint32 startTime = SDL_GetTicks();
         
-        /* Placer ici le code de dessin */
+        /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
+        /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
+        /* - - - - - Placer ici le code de dessin - - - - - */
+        /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
+        /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
         glClear(GL_COLOR_BUFFER_BIT);
         glMatrixMode(GL_MODELVIEW);
@@ -126,8 +133,32 @@ int main(int argc, char** argv)
 
         glTranslatef(camx, camy, 0);
 
-        createPlatform(createPoint(-640, -300, 0), createVector(1280, 60, 0));
-        createPlatform(createPoint(-640, 360, 0), createVector(60, 720, 0));
+        int level = 1;
+
+        Platform listedesblocs[100]; // on verra combien quand ce sera fait
+        Goal listedesgoals[100]; // meme chose
+        Perso listedespersos[100]; //ehoui
+
+        if (level == 1) {
+            int b = 0;
+            int g = 0;
+            if (loopcreateperso == 0) {
+                int p = 0;
+                listedespersos[p] = createPerso(-140, -250, 10, 10, 50, 50, 1, createColor(1, 0, 0), p); drawPerso(listedespersos[0]); p++;   
+            }
+            listedesblocs[b] = createPlatform(createPoint(-640, -360, 0), createVector(1280, -60, 0)); b++;
+            listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(60, 720, 0)); b++;
+            listedesblocs[b] = createPlatform(createPoint(580, 360, 0), createVector(60, 720, 0)); b++;
+            listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(1280, 60, 0)); b++;
+            listedesblocs[b] = createPlatform(createPoint(-50, -200, 0), createVector(100, 100, 0)); b++;
+            listedesgoals[g] = createGoal(listedespersos[0], createPoint(140, -250, 0), createVector(listedespersos[0].width, listedespersos[0].height, 0)); g++;
+        }
+
+        /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
+        /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
+        /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
+        /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
+        /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
         /* Echange du front et du back buffer : mise a jour de la fenetre */
         SDL_GL_SwapWindow(window);
@@ -177,7 +208,8 @@ int main(int argc, char** argv)
                 case SDL_KEYDOWN: // Q D pour se déplacer, Tab pour changer de perso, Espace pour sauter
                     printf("touche pressee (code = %d)\n", e.key.keysym.sym);
                     if (e.key.keysym.sym == 100) {
-                        camx -= 10;
+                        listedespersos[0] = goRight(listedespersos[0]);
+                        printf("%f\n", listedespersos[0].px);
                     } else if (e.key.keysym.sym == 113) {
                         camx += 10;
                     }
