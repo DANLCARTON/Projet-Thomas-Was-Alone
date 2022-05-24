@@ -11,6 +11,7 @@
 #include "../include/personnages.h"
 #include "../include/shape.h"
 #include "../include/levels.h"
+#include "../include/collisions.h"
 
 /* Dimensions initiales et titre de la fenetre */
 static const unsigned int WINDOW_WIDTH = 1280;
@@ -48,7 +49,7 @@ void onWindowResized(unsigned int width, unsigned int height)
     }
 }
 
-int loopcreateperso = 0;
+
 
 int main(int argc, char** argv) 
 {
@@ -114,6 +115,12 @@ int main(int argc, char** argv)
     int camx = 0;
     int camy = 0;
 
+    int nbBlocs;
+
+    int currentPerso = 0;
+    int maxPersos;
+    int loopcreateperso = 0;
+
     /* Boucle principale */
     int loop = 1;
     while(loop) 
@@ -131,7 +138,7 @@ int main(int argc, char** argv)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
-        glTranslatef(camx, camy, 0);
+        // glTranslatef(camx, camy, 0);
 
         int level = 1;
 
@@ -139,18 +146,28 @@ int main(int argc, char** argv)
         Goal listedesgoals[100]; // meme chose
         Perso listedespersos[100]; //ehoui
 
+        // printf("%f\n", currentPerso);
+
+
         if (level == 1) {
             int b = 0;
             int g = 0;
             if (loopcreateperso == 0) {
                 int p = 0;
                 listedespersos[p] = createPerso(-140, -250, 10, 10, 50, 50, 1, createColor(1, 0, 0), p); drawPerso(listedespersos[0]); p++;   
+                listedespersos[p] = createPerso(0, 0, 10, 10, 50, 100, 0, createColor(0, 255, 0), p); drawPerso(listedespersos[p]); p++;
+                maxPersos = p;
+                loopcreateperso = 1;
             }
-            listedesblocs[b] = createPlatform(createPoint(-640, -360, 0), createVector(1280, -60, 0)); b++;
+            drawPerso(listedespersos[0]);
+            drawPerso(listedespersos[1]);
+            listedesblocs[b] = createPlatform(createPoint(-640, -300, 0), createVector(1280, 60, 0)); b++;
             listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(60, 720, 0)); b++;
             listedesblocs[b] = createPlatform(createPoint(580, 360, 0), createVector(60, 720, 0)); b++;
             listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(1280, 60, 0)); b++;
-            listedesblocs[b] = createPlatform(createPoint(-50, -200, 0), createVector(100, 100, 0)); b++;
+            listedesblocs[b] = createPlatform(createPoint(-50, -100, 0), createVector(100, 100, 0)); b++;
+            listedesblocs[b] = createPlatform(createPoint(-300, 250, 0), createVector(70, 130, 0)); b++;
+            nbBlocs = b-1;
             listedesgoals[g] = createGoal(listedespersos[0], createPoint(140, -250, 0), createVector(listedespersos[0].width, listedespersos[0].height, 0)); g++;
         }
 
@@ -208,11 +225,30 @@ int main(int argc, char** argv)
                 case SDL_KEYDOWN: // Q D pour se déplacer, Tab pour changer de perso, Espace pour sauter
                     printf("touche pressee (code = %d)\n", e.key.keysym.sym);
                     if (e.key.keysym.sym == 100) {
-                        listedespersos[0] = goRight(listedespersos[0]);
-                        printf("%f\n", listedespersos[0].px);
+                        if (checkCollision(nbBlocs, listedespersos[currentPerso], listedesblocs, e.key.keysym.sym) == 0) {
+                            listedespersos[currentPerso].px += 10;
+                        }
                     } else if (e.key.keysym.sym == 113) {
-                        camx += 10;
-                    }
+                        if (checkCollision(nbBlocs, listedespersos[currentPerso], listedesblocs, e.key.keysym.sym) == 0) {
+                            listedespersos[currentPerso].px -= 10;
+                        }
+                    } else if (e.key.keysym.sym == 122) {
+                        if (checkCollision(nbBlocs, listedespersos[currentPerso], listedesblocs, e.key.keysym.sym) == 0) {
+                            listedespersos[currentPerso].py += 10;
+                        }
+                    } else if (e.key.keysym.sym == 115) {
+                        if (checkCollision(nbBlocs, listedespersos[currentPerso], listedesblocs, e.key.keysym.sym) == 0) {
+                            listedespersos[currentPerso].py -= 10;
+                        }
+                    } /*else if (e.key.keysym.sym == 97) {
+                        if (currentPerso != 0) {
+                            currentPerso--;
+                        }
+                    } else if (e.key.keysym.sym == 101) {
+                        if (currentPerso < maxPersos) {
+                            currentPerso++;
+                        }
+                    }*/
                     break;
                     
                 default:
