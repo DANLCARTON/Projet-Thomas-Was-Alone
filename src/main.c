@@ -171,6 +171,8 @@ int main(int argc, char** argv)
             listedesgoals[g] = createGoal(listedespersos[0], createPoint(140, -250, 0), createVector(listedespersos[0].width, listedespersos[0].height, 0)); g++;
         }
 
+        printf("%f\n", listedespersos[1].height);
+
         /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
         /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
         /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -240,15 +242,15 @@ int main(int argc, char** argv)
                         if (checkCollision(nbBlocs, listedespersos[currentPerso], listedesblocs, e.key.keysym.sym) == 0) {
                             listedespersos[currentPerso].py -= 10;
                         }
-                    } /*else if (e.key.keysym.sym == 97) {
+                    } else if (e.key.keysym.sym == 97) {
                         if (currentPerso != 0) {
                             currentPerso--;
                         }
                     } else if (e.key.keysym.sym == 101) {
-                        if (currentPerso < maxPersos) {
+                        if (currentPerso < maxPersos-1) {
                             currentPerso++;
                         }
-                    }*/
+                    }
                     break;
                     
                 default:

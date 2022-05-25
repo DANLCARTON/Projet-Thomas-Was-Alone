@@ -8,4 +8,4 @@
     $ make twa
 
 # COMMANDES EN JEU
-Pour l'instant : ZQSD pour se déplacer.
+Pour l'instant : Z Q S D pour se déplacer. A E pour changer de personnage

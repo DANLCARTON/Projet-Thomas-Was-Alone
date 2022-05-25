@@ -9,7 +9,7 @@ void drawPerso(Perso perso) {
     glColor3f(perso.color.r, perso.color.g, perso.color.b);
     glPushMatrix(); // je pense qu'il faudra virer ça après ou peut-être pas en fait
         glTranslatef(perso.px, perso.py, 0);
-        glScalef(perso.height, perso.width, 1);
+        glScalef(perso.width, perso.height, 1);
         glBegin(GL_TRIANGLE_FAN);
             glVertex2f(0, 0);
             glVertex2f(1, 0);

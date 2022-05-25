@@ -16,7 +16,7 @@ int checkCollision(int n, Perso perso, Platform listedesblocs[], int dir) {
         printf("bloc y %f\n", listedesblocs[i].position.y);
         printf("bloc sy %f\n", listedesblocs[i].size.y);
         printf("dir %i\n", dir);
-        if (dir == 100 
+        if (dir == 100 // DROITE
             && perso.py-perso.height < listedesblocs[i].position.y 
             && perso.py > listedesblocs[i].position.y-listedesblocs[i].size.y 
             && perso.px+perso.width >= listedesblocs[i].position.x
@@ -25,7 +25,7 @@ int checkCollision(int n, Perso perso, Platform listedesblocs[], int dir) {
             perso.px-=10;
             collision = 1;
             return collision;
-        } else if (dir == 113 
+        } else if (dir == 113 // GAUCHE
                     && perso.py-perso.height < listedesblocs[i].position.y 
                     && perso.py > listedesblocs[i].position.y-listedesblocs[i].size.y 
                     && perso.px <= listedesblocs[i].position.x+listedesblocs[i].size.x
@@ -34,7 +34,7 @@ int checkCollision(int n, Perso perso, Platform listedesblocs[], int dir) {
             perso.px+=10;
             collision = 1;
             return collision;
-        } else if (dir == 122 
+        } else if (dir == 122 // HAUT
                     && perso.px+perso.width > listedesblocs[i].position.x 
                     && perso.px < listedesblocs[i].position.x+listedesblocs[i].size.x 
                     && perso.py >= listedesblocs[i].position.y-listedesblocs[i].size.y
@@ -43,7 +43,7 @@ int checkCollision(int n, Perso perso, Platform listedesblocs[], int dir) {
             perso.py-=10;
             collision = 1;
             return collision;
-        } else if (dir == 115 
+        } else if (dir == 115 // BAS
                     && perso.px+perso.width > listedesblocs[i].position.x 
                     && perso.px < listedesblocs[i].position.x+listedesblocs[i].size.x 
                     && perso.py-perso.height <= listedesblocs[i].position.y
