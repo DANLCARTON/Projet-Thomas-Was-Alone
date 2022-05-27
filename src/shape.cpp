@@ -44,7 +44,6 @@ Platform createPlatform (Point3D pos, Vector3D size) {
     rect.moving = 0;
     rect.dirMove = 0;
     rect.distanceMove = 0;
-    drawPlatform(rect);
     return rect;
 }
 
@@ -53,6 +52,17 @@ Goal createGoal (Perso perso, Point3D pos, Vector3D size) {
     goal.perso = perso;
     goal.position = pos,
     goal.size = size;
-    drawGoal(goal);
     return goal;
+}
+
+Platform createFond (ColorRGB color) {
+    Platform rect;
+    rect.position = createPoint(-1000, 1000, 0);
+    rect.size = createVector(2000, 2000, 0);
+    rect.color = color;
+    rect.solid = 0;
+    rect.moving = 0;
+    rect.dirMove = 0;
+    rect.distanceMove = 0;
+    return rect;
 }

@@ -24,5 +24,8 @@ typedef struct Goal {
 Platform createPlatform(Point3D pos, Vector3D size);
 Platform createMovingPlatform(Point3D pos, Vector3D size);
 Goal createGoal(Perso perso, Point3D pos, Vector3D size);
+Platform createFond (ColorRGB color);
+void drawPlatform (Platform plat);
+void drawGoal (Goal goal);
 
 #endif
