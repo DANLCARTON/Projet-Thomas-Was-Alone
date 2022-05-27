@@ -4,7 +4,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-
+#include <GL/glut.h>
+#include <GL/glext.h>
+#include <string.h>
 
 
 #include "../include/colors.hpp"
@@ -13,6 +15,7 @@
 #include "../include/shape.hpp"
 #include "../include/levels.hpp"
 #include "../include/collisions.hpp"
+#include "../include/text.hpp"
 
 /* Dimensions initiales et titre de la fenetre */
 static const unsigned int WINDOW_WIDTH = 1280;
@@ -47,10 +50,18 @@ void onWindowResized(unsigned int width, unsigned int height)
     }
 }
 
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - D E B U T   D U   M A I N - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 int main(int argc, char** argv) 
 {
+    // Initialisation de la bibliothèque glut
+
+    glutInit(&argc, argv);
+    
     //* Initialisation de la SDL */
 
     if(SDL_Init(SDL_INIT_VIDEO) < 0) 
@@ -118,6 +129,7 @@ int main(int argc, char** argv)
     int currentPerso = 0;
     int maxPersos;
     int loopcreateperso = 0;
+    int loopcreatemenu = 0;
 
 
     Uint32 elapsedTime=0;
@@ -129,6 +141,8 @@ int main(int argc, char** argv)
     bool keys[]={false,false}; //enregistre les touches pressés à un instant donné
 
     bool changementDePerso=false;
+
+    int level = 0;
 
     /* Boucle principale */
     int loop = 1;
@@ -148,15 +162,15 @@ int main(int argc, char** argv)
         glLoadIdentity();
 
         // glTranslatef(camx, camy, 0);
-
-        int level = 1;
-
         Platform listedesblocs[100]; // on verra combien quand ce sera fait
         Goal listedesgoals[100]; // meme chose
         Perso listedespersos[100]; //ehoui
 
-
-        if (level == 1) {
+        if (level == 0) {
+            int b = 0;
+            listedesblocs[b] = createFond(createColor(.1, .1, .1)); b++;
+            nbBlocs = b;
+        } else if (level == 1) {
             int b = 0;
             int g = 0;
             if (loopcreateperso == 0) {
@@ -170,8 +184,7 @@ int main(int argc, char** argv)
                 maxPersos = p;
                 loopcreateperso = 1;
             }
-            drawPerso(listedespersos[0]);
-            drawPerso(listedespersos[1]);
+            listedesblocs[b] = createFond(createColor(.1, .1, .1)); b++;
             listedesblocs[b] = createPlatform(createPoint(-640, -300, 0), createVector(1280, 60, 0)); b++;
             listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(60, 720, 0)); b++;
             listedesblocs[b] = createPlatform(createPoint(580, 360, 0), createVector(60, 720, 0)); b++;
@@ -180,6 +193,21 @@ int main(int argc, char** argv)
             listedesblocs[b] = createPlatform(createPoint(-300, 240, 0), createVector(70, 130, 0)); b++;
             nbBlocs = b;
             listedesgoals[g] = createGoal(listedespersos[0], createPoint(140, -250, 0), createVector(listedespersos[0].width, listedespersos[0].height, 0)); g++;
+        }
+
+
+        for (int i = 0; i < nbBlocs+1; i++) {
+            drawPlatform(listedesblocs[i]);
+        }
+
+        for (int i = 0; i < maxPersos; i++) {
+            drawPerso(listedespersos[i]);
+        }
+
+        if (level == 0) {
+            glColor3f(.5, .5, .5);
+            drawString(-400, 0, 0, "Thomas Was Alone");
+            drawString(200, 0, 0, "Level 01");
         }
 
         /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -245,7 +273,14 @@ int main(int argc, char** argv)
 
                 /* Clic souris */
                 case SDL_MOUSEBUTTONUP:
-                    printf("clic en (%d, %d)\n", e.button.x, e.button.y);
+                    printf("clic en (x %d, y %d)\n", e.button.x, e.button.y);
+                    if (level == 0) {
+                        printf("if 1");
+                        if (e.button.x > 800 && e.button.x < 950 && e.button.y > 330 && e.button.y < 370) {
+                            printf("if 2");
+                            level = 1;
+                        }
+                    }
                     break;
 
                 case SDL_KEYDOWN: // Q D pour se déplacer, Tab pour changer de perso, Espace pour sauter
@@ -272,6 +307,16 @@ int main(int argc, char** argv)
                             else{
                                 currentPerso=0;
                             }
+                            break;
+                        
+
+                        case 49: // 1
+                            if (level == 0)
+                                level = 1;
+                            break;
+                        case 1073741913: // pav. num. 1 
+                            if (level == 0)
+                                level = 1;
                             break;
                         default:
                         break;
