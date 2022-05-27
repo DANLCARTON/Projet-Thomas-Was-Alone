@@ -161,7 +161,6 @@ int main(int argc, char** argv)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
-        // glTranslatef(camx, camy, 0);
         Platform listedesblocs[100]; // on verra combien quand ce sera fait
         Goal listedesgoals[100]; // meme chose
         Perso listedespersos[100]; //ehoui
@@ -171,6 +170,7 @@ int main(int argc, char** argv)
             listedesblocs[b] = createFond(createColor(.1, .1, .1)); b++;
             nbBlocs = b;
         } else if (level == 1) {
+            glTranslated(-listedespersos[currentPerso].px, -listedespersos[currentPerso].py, 0);
             int b = 0;
             int g = 0;
             if (loopcreateperso == 0) {
@@ -209,6 +209,9 @@ int main(int argc, char** argv)
             drawString(-400, 0, 0, "Thomas Was Alone");
             drawString(200, 0, 0, "Level 01");
         }
+
+        printf("cp x %f\n", listedespersos[currentPerso].px);
+        printf("cp y %f\n", listedespersos[currentPerso].py);
 
         /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
         /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
