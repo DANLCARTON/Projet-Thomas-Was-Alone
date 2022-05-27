@@ -7,7 +7,7 @@
 
 void drawPlatform (Platform plat) {
     glColor3f(plat.color.r, plat.color.g, plat.color.b);
-    glPushMatrix(); // je pense qu'il faudra virer ça après ou peut-être pas en fait
+    glPushMatrix(); 
         glTranslatef(plat.position.x, plat.position.y, plat.position.z);
         glScalef(plat.size.x, plat.size.y, 1);
         glBegin(GL_TRIANGLE_FAN);
@@ -65,4 +65,22 @@ Platform createFond (ColorRGB color) {
     rect.dirMove = 0;
     rect.distanceMove = 0;
     return rect;
+}
+
+Platform solidifyCharacter(Perso perso) {
+    Platform rect;
+    rect.position = createPoint(perso.px, perso.py, 0);
+    rect.size = createVector(perso.width, perso.height, 0);
+    rect.color = perso.color;
+    rect.solid = 1;
+    rect.moving = 0;
+    rect.dirMove = 0;
+    rect.distanceMove = 0;
+    return rect;
+}
+
+Platform maskPlatformCreatedFormCharacter(Platform plat) {
+    plat.color = createColor(0.2, 0.2, 0.2);
+    plat.solid = 0;
+    return plat;
 }

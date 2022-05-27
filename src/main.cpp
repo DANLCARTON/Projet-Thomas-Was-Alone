@@ -121,15 +121,14 @@ int main(int argc, char** argv)
   
     onWindowResized(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    int camx = 0;
-    int camy = 0;
+    //int camx = 0;
+    //int camy = 0;
 
     int nbBlocs;
 
     int currentPerso = 0;
     int maxPersos;
-    int loopcreateperso = 0;
-    int loopcreatemenu = 0;
+    int firstloop = 0;
 
 
     Uint32 elapsedTime=0;
@@ -143,6 +142,9 @@ int main(int argc, char** argv)
     bool changementDePerso=false;
 
     int level = 0;
+
+    int k = 0;
+    int ipcfc[100]; //aaaaaaaa index Platforms Created From Characters
 
     /* Boucle principale */
     int loop = 1;
@@ -173,7 +175,7 @@ int main(int argc, char** argv)
             glTranslated(-listedespersos[currentPerso].px, -listedespersos[currentPerso].py, 0);
             int b = 0;
             int g = 0;
-            if (loopcreateperso == 0) {
+            if (firstloop == 0) {
                 int p = 0;
                 listedespersos[p] = createPerso(-140, -250, 0, 0, 50, 50, createColor(1, 0, 0)); 
                 drawPerso(listedespersos[p]); 
@@ -182,7 +184,6 @@ int main(int argc, char** argv)
                 drawPerso(listedespersos[p]); 
                 p++;
                 maxPersos = p;
-                loopcreateperso = 1;
             }
             listedesblocs[b] = createFond(createColor(.1, .1, .1)); b++;
             listedesblocs[b] = createPlatform(createPoint(-640, -300, 0), createVector(1280, 60, 0)); b++;
@@ -191,7 +192,18 @@ int main(int argc, char** argv)
             listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(1280, 60, 0)); b++;
             listedesblocs[b] = createPlatform(createPoint(-50, -100, 0), createVector(100, 100, 0)); b++;
             listedesblocs[b] = createPlatform(createPoint(-300, 240, 0), createVector(70, 130, 0)); b++;
-            nbBlocs = b;
+            for (int i = 0; i < maxPersos; i++) {
+                if (listedespersos[currentPerso].color.r == listedesblocs[b].color.r && listedespersos[currentPerso].color.g == listedesblocs[b].color.g && listedespersos[currentPerso].color.b == listedesblocs[b].color.b) {
+                    listedesblocs[b] = maskPlatformCreatedFormCharacter(listedesblocs[b]);
+                }
+                if (listedespersos[currentPerso].color.r != listedespersos[i].color.r || listedespersos[currentPerso].color.g != listedespersos[i].color.g || listedespersos[currentPerso].color.b != listedespersos[i].color.b) {
+                    listedesblocs[b] = solidifyCharacter(listedespersos[i]); b++;
+                }
+            }
+            if (firstloop == 0) {
+                nbBlocs = b;
+                firstloop = 1;
+            }
             listedesgoals[g] = createGoal(listedespersos[0], createPoint(140, -250, 0), createVector(listedespersos[0].width, listedespersos[0].height, 0)); g++;
         }
 
@@ -210,8 +222,8 @@ int main(int argc, char** argv)
             drawString(200, 0, 0, "Level 01");
         }
 
-        printf("cp x %f\n", listedespersos[currentPerso].px);
-        printf("cp y %f\n", listedespersos[currentPerso].py);
+        //printf("cp x %f\n", listedespersos[currentPerso].px);
+        //printf("cp y %f\n", listedespersos[currentPerso].py);
 
         /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
         /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -304,12 +316,30 @@ int main(int argc, char** argv)
                             break;
                         case 9: //Tab : CHangement de perso
                             changementDePerso=true;
+                            //nbBlocs++;
+                            //printf("%i\n", nbBlocs);
+                            //printf("cp x %f\n", listedespersos[currentPerso].px);
+                            //printf("cp y %f\n", listedespersos[currentPerso].py);
+                            //listedesblocs[nbBlocs] = solidifyCharacter(listedespersos[currentPerso]);
+                            //printf("plat x %f\n", listedesblocs[nbBlocs].position.x);
+                            //printf("plat y %f\n", listedesblocs[nbBlocs].position.y);
+                            //ipcfc[k] = nbBlocs;
+                            //for (int i = 0; i < nbBlocs; i++) {
+                                //printf("listedesblocs[%i.position.x %f\n", i, listedesblocs[i].position.x);    
+                            //}
+                            ////printf("listedesblocs[ipcfc[k]].position.x %f\n", listedesblocs[ipcfc[k]].position.x);
+                            //k++;
                             if (currentPerso < maxPersos-1) {
                                 currentPerso++;
                             }
                             else{
                                 currentPerso=0;
                             }
+                            //for (int i = 0; i < k; i++) {
+                                //if (listedespersos[currentPerso].color.r == listedesblocs[ipcfc[i]].color.r && listedespersos[currentPerso].color.g == listedesblocs[ipcfc[i]].color.g && listedespersos[currentPerso].color.b == listedesblocs[ipcfc[i]].color.b) {
+                                    //listedesblocs[ipcfc[i]] = maskPlatformCreatedFormCharacter(listedesblocs[ipcfc[i]]);
+                                //}
+                            //}
                             break;
                         
 
