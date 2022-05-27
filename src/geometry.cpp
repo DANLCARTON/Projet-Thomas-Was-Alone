@@ -1,5 +1,5 @@
 #include <math.h>
-#include "../include/geometry.h"
+#include "../include/geometry.hpp"
 #include <stdlib.h>
 
 // Construit le point (x, y, z)
@@ -69,7 +69,6 @@ Vector3D multVector(Vector3D v, float a){
 
 Vector3D divVector(Vector3D v, float a){
     if (a==0){
-        printf("On ne peut pas diviser par 0 !\n");
     }
     else{
         v.x=v.x/a;
@@ -106,10 +105,10 @@ Vector3D normalize(Vector3D v){
 }
 
 
-//afficher le contenu d'un point où d'un vecteur
-void printPoint3D(Point3D p){
-    printf ("(%f, %f, %f) \n",p.x,p.y, p.z);
-}
-void printVector3D(Vector3D v){
-    printf ("(%f, %f, %f) \n",v.x,v.y, v.z);
-}
+// //afficher le contenu d'un point où d'un vecteur
+// void printPoint3D(Point3D p){
+//     printf ("(%f, %f, %f) \n",p.x,p.y, p.z);
+// }
+// void printVector3D(Vector3D v){
+//     printf ("(%f, %f, %f) \n",v.x,v.y, v.z);
+// }

@@ -1,9 +1,9 @@
-#ifndef SHAPE_H
-#define SHAPE_H
+#ifndef SHAPE_HPP
+#define SHAPE_HPP
 
-#include "geometry.h"
-#include "colors.h"
-#include "personnages.h"
+#include "geometry.hpp"
+#include "colors.hpp"
+#include "personnages.hpp"
 
 typedef struct Rectangle {
     Point3D position;

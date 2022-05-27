@@ -2,8 +2,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "../include/shape.h"
-#include "../include/colors.h"
+#include "../include/shape.hpp"
+#include "../include/colors.hpp"
 
 void drawPlatform (Platform plat) {
     glColor3f(plat.color.r, plat.color.g, plat.color.b);

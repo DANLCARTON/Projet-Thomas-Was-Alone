@@ -9,8 +9,8 @@ SRC_DIR	= src
 OBJ_DIR	= obj
 
 
-SRC_FILES 	= $(shell find $(SRC_DIR)/ -type f -name '*.c')
-OBJ_FILES 	= $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o, $(SRC_FILES))
+SRC_FILES 	= $(shell find $(SRC_DIR)/ -type f -name '*.cpp')
+OBJ_FILES 	= $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o, $(SRC_FILES))
 EXEC_BIN	= twa.out
 
 
@@ -21,7 +21,7 @@ comp : $(OBJ_FILES)
 	$(CC) -o $(BIN_DIR)/$(EXEC_BIN) $(OBJ_FILES) $(LDFLAGS) $(LDFLAGS)
 
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	mkdir -p "$(@D)"
 	$(CC) -c $< -o $@ $(CFLAGS) $(INC_DIR)
 
@@ -34,7 +34,7 @@ twa : $(OBJ_FILES)
 	./$(BIN_DIR)/$(EXEC_BIN)
 
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	mkdir -p "$(@D)"
 	$(CC) -c $< -o $@ $(CFLAGS) $(INC_DIR)
 

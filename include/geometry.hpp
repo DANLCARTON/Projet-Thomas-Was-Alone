@@ -1,5 +1,5 @@
-#ifndef GEOMETRY_H
-#define GEOMETRY_H
+#ifndef GEOMETRY_HPP
+#define GEOMETRY_HPP
 
 typedef struct Vec3f {
     float x;

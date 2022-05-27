@@ -1,4 +1,4 @@
-#include "../include/colors.h"
+#include "../include/colors.hpp"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -46,7 +46,6 @@ ColorRGB multColor(ColorRGB c, float a){
 
 ColorRGB divColor(ColorRGB c, float a){
     if (a==0){
-        printf("On ne peut pas diviser par 0 !\n");
     }
     else{
         c.r=c.r/a;

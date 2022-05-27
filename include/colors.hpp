@@ -1,8 +1,5 @@
-#ifndef COLORS_H
-#define COLORS_H
-
-#define min(a, b) (((a) < (b)) ? (a) : (b))
-#define max(a, b) (((a) > (b)) ? (a) : (b)) 
+#ifndef COLORS_HPP
+#define COLORS_HPP
 
 typedef struct Col3f {
     float r;
