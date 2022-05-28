@@ -43,6 +43,8 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
     {
         Perso* perso=&listedespersos[n];
 
+        
+
         if ((perso->vx)/(2*m) > 0) //droite
         {
             float distanceMin=10000000000000000000000.0f;
