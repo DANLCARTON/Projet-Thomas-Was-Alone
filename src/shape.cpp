@@ -25,7 +25,7 @@ void drawGoal (Goal goal) {
     glPushMatrix(); 
         glTranslatef(goal.position.x, goal.position.y, goal.position.z);
         glScalef(goal.size.x, goal.size.y, 1);
-        glBegin(GL_LINES);
+        glBegin(GL_LINE_STRIP);
             glVertex2f(0, 0);
             glVertex2f(1, 0);
             glVertex2f(1, -1);
@@ -57,8 +57,8 @@ Goal createGoal (Perso perso, Point3D pos, Vector3D size) {
 
 Platform createFond (ColorRGB color) {
     Platform rect;
-    rect.position = createPoint(-1000, 1000, 0);
-    rect.size = createVector(2000, 2000, 0);
+    rect.position = createPoint(-10000, 10000, 0);
+    rect.size = createVector(20000, 20000, 0);
     rect.color = color;
     rect.solid = 0;
     rect.moving = 0;

@@ -5,6 +5,8 @@
 
 int m=60; //doit être identique au n de personnages.cpp
 
+int ecartPositionVictoire=5;
+
 bool memePlanHorizontal(const Perso perso, const Platform bloc)
 {
     if (perso.py-perso.height>bloc.position.y)
@@ -50,7 +52,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
             {
                 float distance=listedesblocs[i].position.x-(perso->px+perso->width);
                 
-                if (distance>0 && distance<distanceMin 
+                if (distance>=0 && distance<distanceMin 
                     && memePlanHorizontal(*perso,listedesblocs[i])==true
                     )
                 {
@@ -113,7 +115,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
             {
                 float distance=listedesblocs[i].position.y-listedesblocs[i].size.y - perso->py;
                 
-                if (distance>0 && distance<distanceMin 
+                if (distance>=0 && distance<distanceMin 
                     && memePlanVertical(*perso,listedesblocs[i])==true
                     )
                 {
@@ -144,7 +146,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
             {
                 float distance=perso->py-perso->height - listedesblocs[i].position.y;
                 
-                if (distance>0 && distance<distanceMin 
+                if (distance>=0 && distance<distanceMin 
                     && memePlanVertical(*perso,listedesblocs[i])==true
                     )
                 {
@@ -185,52 +187,24 @@ bool checkGround(const Perso perso, const int nbBlocs, const Platform listedesbl
     return false;
 }
 
-int checkCollision(int n, Perso perso, Platform listedesblocs[], int dir) {
-    int collision = 0;
-    for (int i = 0; i <= n; i++) {
-
-        if (dir == 100 // DROITE
-            && perso.py-perso.height < listedesblocs[i].position.y 
-            && perso.py > listedesblocs[i].position.y-listedesblocs[i].size.y 
-            && perso.px+perso.width >= listedesblocs[i].position.x
-            && perso.px < listedesblocs[i].position.x+listedesblocs[i].size.x
-            && listedesblocs[i].solid == 1) {
-            printf("if 1\n");
-            perso.px-=10;
-            collision = 1;
-            return collision;
-        } else if (dir == 113 // GAUCHE
-                    && perso.py-perso.height < listedesblocs[i].position.y 
-                    && perso.py > listedesblocs[i].position.y-listedesblocs[i].size.y 
-                    && perso.px <= listedesblocs[i].position.x+listedesblocs[i].size.x
-                    && perso.px+perso.width > listedesblocs[i].position.x
-                    && listedesblocs[i].solid == 1) {
-            printf("if 2\n");
-            perso.px+=10;
-            collision = 1;
-            return collision;
-        } else if (dir == 122 // HAUT
-                    && perso.px+perso.width > listedesblocs[i].position.x 
-                    && perso.px < listedesblocs[i].position.x+listedesblocs[i].size.x 
-                    && perso.py >= listedesblocs[i].position.y-listedesblocs[i].size.y
-                    && perso.py-perso.height < listedesblocs[i].position.y
-                    && listedesblocs[i].solid == 1) {
-            printf("if 3\n");
-            perso.py-=10;
-            collision = 1;
-            return collision;
-        } else if (dir == 115 // BAS
-                    && perso.px+perso.width > listedesblocs[i].position.x 
-                    && perso.px < listedesblocs[i].position.x+listedesblocs[i].size.x 
-                    && perso.py-perso.height <= listedesblocs[i].position.y
-                    && perso.py > listedesblocs[i].position.y-listedesblocs[i].size.y
-                    && listedesblocs[i].solid == 1) {
-            printf("if 4\n");
-            perso.py+=10;
-            collision = 1;
-            return collision;
-        }
-        printf("\n");
+bool victory(const int nbPersos, const Perso listedespersos[], const Goal listedesgoals[])
+{
+    if(nbPersos==0)
+    {
+        return false;
     }
-    return collision;
+    for (int i=0; i<nbPersos; i++)
+    {
+        if(listedespersos[i].px>listedesgoals[i].position.x+ecartPositionVictoire 
+        || listedespersos[i].px<listedesgoals[i].position.x-ecartPositionVictoire)
+        {
+            return false;
+        }
+        if(listedespersos[i].py>listedesgoals[i].position.y+ecartPositionVictoire 
+        || listedespersos[i].py<listedesgoals[i].position.y-ecartPositionVictoire)
+        {
+            return false;
+        }
+    }
+    return true;
 }

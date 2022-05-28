@@ -10,4 +10,6 @@ bool checkGround(const Perso perso, const int nbBlocs, const Platform listedesbl
 
 void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, const Platform listedesblocs[], const Uint32 elapsedTime);
 
+bool victory(const int nbPersos, const Perso listedespersos[], const Goal listedesgoals[]);
+
 #endif
