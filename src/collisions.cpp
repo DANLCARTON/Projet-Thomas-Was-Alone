@@ -43,129 +43,258 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
     {
         Perso* perso=&listedespersos[n];
 
-        
-
-        if ((perso->vx)/(2*m) > 0) //droite
+        if (std::abs(perso->vx)>std::abs(perso->vy))
         {
-            float distanceMin=10000000000000000000000.0f;
-            int obstacleIndex=NULL;
 
-            for (int i=0 ; i<nbBlocs ; i++)
+            if ((perso->vx)/(2*m) > 0) //droite
             {
-                float distance=listedesblocs[i].position.x-(perso->px+perso->width);
-                
-                if (distance>=0 && distance<distanceMin 
-                    && memePlanHorizontal(*perso,listedesblocs[i])==true
-                    )
+                float distanceMin=10000000000000000000000.0f;
+                int obstacleIndex=NULL;
+
+                for (int i=0 ; i<nbBlocs ; i++)
                 {
-                    distanceMin=distance;
-                    obstacleIndex=i;
+                    float distance=listedesblocs[i].position.x-(perso->px+perso->width);
+                    
+                    if (distance>=0 && distance<distanceMin 
+                        && memePlanHorizontal(*perso,listedesblocs[i])==true
+                        )
+                    {
+                        distanceMin=distance;
+                        obstacleIndex=i;
+                    }
+                }
+                if(obstacleIndex)
+                {
+                    float positionBordObstacle=listedesblocs[obstacleIndex].position.x;
+                    float futurePositionBordPerso=perso->px+(perso->vx)/(2*m)*elapsedTime+perso->width;
+                
+                    // si le perso rentre dans l'obstacle
+                    if (positionBordObstacle - futurePositionBordPerso < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    {
+                        perso->vx=0;
+                        perso->px = positionBordObstacle-perso->width-1;
+                    }
                 }
             }
-            if(obstacleIndex)
+
+            else if ((perso->vx)/(2*m) < 0) //gauche
             {
-                float positionBordObstacle=listedesblocs[obstacleIndex].position.x;
-                float futurePositionBordPerso=perso->px+(perso->vx)/(2*m)*elapsedTime+perso->width;
-               
-                // si le perso rentre dans l'obstacle
-                if (positionBordObstacle - futurePositionBordPerso < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                float distanceMin=10000000000000000000000.0f;
+                int obstacleIndex=NULL;
+
+                for (int i=0 ; i<nbBlocs ; i++)
                 {
-                    perso->vx=0;
-                    perso->px = positionBordObstacle-perso->width-1;
+                    float distance=perso->px
+                                    -(listedesblocs[i].position.x+listedesblocs[i].size.x);
+                    
+                    if (distance>=0 && distance<distanceMin 
+                        && memePlanHorizontal(*perso,listedesblocs[i])==true
+                        )
+                    {
+                        distanceMin=distance;
+                        obstacleIndex=i;
+                    }
+                }
+                if(obstacleIndex)
+                {
+                    float positionBordObstacle=listedesblocs[obstacleIndex].position.x+listedesblocs[obstacleIndex].size.x;
+                    float futurePositionBordPerso=perso->px+(perso->vx)/(2*m)*elapsedTime;
+                
+                    // si le perso rentre dans l'obstacle
+                    if (futurePositionBordPerso - positionBordObstacle < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    {
+                        perso->vx=0;
+                        perso->px = positionBordObstacle+1;
+                    }
+                }
+            }
+
+            if ((perso->vy)/(2*m) > 0) //haut
+            {
+                float distanceMin=10000000000000000000000.0f;
+                int obstacleIndex=NULL;
+
+                for (int i=0 ; i<nbBlocs ; i++)
+                {
+                    float distance=listedesblocs[i].position.y-listedesblocs[i].size.y - perso->py;
+                    
+                    if (distance>=0 && distance<distanceMin 
+                        && memePlanVertical(*perso,listedesblocs[i])==true
+                        )
+                    {
+                        distanceMin=distance;
+                        obstacleIndex=i;
+                    }
+                }
+                if(obstacleIndex)
+                {
+                    float positionBordObstacle=listedesblocs[obstacleIndex].position.y - listedesblocs[obstacleIndex].size.y;
+                    float futurePositionBordPerso=perso->py+(perso->vy)/(2*m)*elapsedTime;
+                
+                    // si le perso rentre dans l'obstable
+                    if (positionBordObstacle - futurePositionBordPerso < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    {
+                        perso->vy=0;
+                        perso->py = positionBordObstacle-1;
+                    }
+                }
+            }
+
+            else if ((perso->vy)/(2*m) < 0) //bas
+            {
+                float distanceMin=10000000000000000000000.0f;
+                int obstacleIndex=NULL;
+
+                for (int i=0 ; i<nbBlocs ; i++)
+                {
+                    float distance=perso->py-perso->height - listedesblocs[i].position.y;
+                    
+                    if (distance>=0 && distance<distanceMin 
+                        && memePlanVertical(*perso,listedesblocs[i])==true
+                        )
+                    {
+                        distanceMin=distance;
+                        obstacleIndex=i;
+                    }
+                }
+                if(obstacleIndex)
+                {
+                    float positionBordObstacle=listedesblocs[obstacleIndex].position.y;
+                    float futurePositionBordPerso=perso->py+(perso->vy)/(2*m)*elapsedTime-perso->height;
+                
+                    // si le perso rentre dans l'obstable
+                    if (futurePositionBordPerso - positionBordObstacle < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    {
+                        perso->vy=0;
+                        perso->py = positionBordObstacle+perso->height+1;
+                    }
                 }
             }
         }
-
-        else if ((perso->vx)/(2*m) < 0) //gauche
+        else 
         {
-            float distanceMin=10000000000000000000000.0f;
-            int obstacleIndex=NULL;
-
-            for (int i=0 ; i<nbBlocs ; i++)
+            if ((perso->vy)/(2*m) > 0) //haut
             {
-                float distance=perso->px
-                                -(listedesblocs[i].position.x+listedesblocs[i].size.x);
+                float distanceMin=10000000000000000000000.0f;
+                int obstacleIndex=NULL;
+
+                for (int i=0 ; i<nbBlocs ; i++)
+                {
+                    float distance=listedesblocs[i].position.y-listedesblocs[i].size.y - perso->py;
+                    
+                    if (distance>=0 && distance<distanceMin 
+                        && memePlanVertical(*perso,listedesblocs[i])==true
+                        )
+                    {
+                        distanceMin=distance;
+                        obstacleIndex=i;
+                    }
+                }
+                if(obstacleIndex)
+                {
+                    float positionBordObstacle=listedesblocs[obstacleIndex].position.y - listedesblocs[obstacleIndex].size.y;
+                    float futurePositionBordPerso=perso->py+(perso->vy)/(2*m)*elapsedTime;
                 
-                if (distance>=0 && distance<distanceMin 
-                    && memePlanHorizontal(*perso,listedesblocs[i])==true
-                    )
-                {
-                    distanceMin=distance;
-                    obstacleIndex=i;
+                    // si le perso rentre dans l'obstable
+                    if (positionBordObstacle - futurePositionBordPerso < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    {
+                        perso->vy=0;
+                        perso->py = positionBordObstacle-1;
+                    }
                 }
             }
-            if(obstacleIndex)
+
+            else if ((perso->vy)/(2*m) < 0) //bas
             {
-                float positionBordObstacle=listedesblocs[obstacleIndex].position.x+listedesblocs[obstacleIndex].size.x;
-                float futurePositionBordPerso=perso->px+(perso->vx)/(2*m)*elapsedTime;
-               
-                // si le perso rentre dans l'obstacle
-                if (futurePositionBordPerso - positionBordObstacle < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                float distanceMin=10000000000000000000000.0f;
+                int obstacleIndex=NULL;
+
+                for (int i=0 ; i<nbBlocs ; i++)
                 {
-                    perso->vx=0;
-                    perso->px = positionBordObstacle+1;
+                    float distance=perso->py-perso->height - listedesblocs[i].position.y;
+                    
+                    if (distance>=0 && distance<distanceMin 
+                        && memePlanVertical(*perso,listedesblocs[i])==true
+                        )
+                    {
+                        distanceMin=distance;
+                        obstacleIndex=i;
+                    }
                 }
-            }
-        }
-
-        if ((perso->vy)/(2*m) > 0) //haut
-        {
-            float distanceMin=10000000000000000000000.0f;
-            int obstacleIndex=NULL;
-
-            for (int i=0 ; i<nbBlocs ; i++)
-            {
-                float distance=listedesblocs[i].position.y-listedesblocs[i].size.y - perso->py;
+                if(obstacleIndex)
+                {
+                    float positionBordObstacle=listedesblocs[obstacleIndex].position.y;
+                    float futurePositionBordPerso=perso->py+(perso->vy)/(2*m)*elapsedTime-perso->height;
                 
-                if (distance>=0 && distance<distanceMin 
-                    && memePlanVertical(*perso,listedesblocs[i])==true
-                    )
-                {
-                    distanceMin=distance;
-                    obstacleIndex=i;
+                    // si le perso rentre dans l'obstable
+                    if (futurePositionBordPerso - positionBordObstacle < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    {
+                        perso->vy=0;
+                        perso->py = positionBordObstacle+perso->height+1;
+                    }
                 }
             }
-            if(obstacleIndex)
+
+            if ((perso->vx)/(2*m) > 0) //droite
             {
-                float positionBordObstacle=listedesblocs[obstacleIndex].position.y - listedesblocs[obstacleIndex].size.y;
-                float futurePositionBordPerso=perso->py+(perso->vy)/(2*m)*elapsedTime;
-               
-                // si le perso rentre dans l'obstable
-                if (positionBordObstacle - futurePositionBordPerso < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                float distanceMin=10000000000000000000000.0f;
+                int obstacleIndex=NULL;
+
+                for (int i=0 ; i<nbBlocs ; i++)
                 {
-                    perso->vy=0;
-                    perso->py = positionBordObstacle-1;
+                    float distance=listedesblocs[i].position.x-(perso->px+perso->width);
+                    
+                    if (distance>=0 && distance<distanceMin 
+                        && memePlanHorizontal(*perso,listedesblocs[i])==true
+                        )
+                    {
+                        distanceMin=distance;
+                        obstacleIndex=i;
+                    }
                 }
-            }
-        }
-
-        else if ((perso->vy)/(2*m) < 0) //bas
-        {
-            float distanceMin=10000000000000000000000.0f;
-            int obstacleIndex=NULL;
-
-            for (int i=0 ; i<nbBlocs ; i++)
-            {
-                float distance=perso->py-perso->height - listedesblocs[i].position.y;
+                if(obstacleIndex)
+                {
+                    float positionBordObstacle=listedesblocs[obstacleIndex].position.x;
+                    float futurePositionBordPerso=perso->px+(perso->vx)/(2*m)*elapsedTime+perso->width;
                 
-                if (distance>=0 && distance<distanceMin 
-                    && memePlanVertical(*perso,listedesblocs[i])==true
-                    )
-                {
-                    distanceMin=distance;
-                    obstacleIndex=i;
+                    // si le perso rentre dans l'obstacle
+                    if (positionBordObstacle - futurePositionBordPerso < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    {
+                        perso->vx=0;
+                        perso->px = positionBordObstacle-perso->width-1;
+                    }
                 }
             }
-            if(obstacleIndex)
+
+            else if ((perso->vx)/(2*m) < 0) //gauche
             {
-                float positionBordObstacle=listedesblocs[obstacleIndex].position.y;
-                float futurePositionBordPerso=perso->py+(perso->vy)/(2*m)*elapsedTime-perso->height;
-               
-                // si le perso rentre dans l'obstable
-                if (futurePositionBordPerso - positionBordObstacle < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                float distanceMin=10000000000000000000000.0f;
+                int obstacleIndex=NULL;
+
+                for (int i=0 ; i<nbBlocs ; i++)
                 {
-                    perso->vy=0;
-                    perso->py = positionBordObstacle+perso->height+1;
+                    float distance=perso->px
+                                    -(listedesblocs[i].position.x+listedesblocs[i].size.x);
+                    
+                    if (distance>=0 && distance<distanceMin 
+                        && memePlanHorizontal(*perso,listedesblocs[i])==true
+                        )
+                    {
+                        distanceMin=distance;
+                        obstacleIndex=i;
+                    }
+                }
+                if(obstacleIndex)
+                {
+                    float positionBordObstacle=listedesblocs[obstacleIndex].position.x+listedesblocs[obstacleIndex].size.x;
+                    float futurePositionBordPerso=perso->px+(perso->vx)/(2*m)*elapsedTime;
+                
+                    // si le perso rentre dans l'obstacle
+                    if (futurePositionBordPerso - positionBordObstacle < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    {
+                        perso->vx=0;
+                        perso->px = positionBordObstacle+1;
+                    }
                 }
             }
         }
