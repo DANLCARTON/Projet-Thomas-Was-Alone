@@ -48,7 +48,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
 
             for (int i=0 ; i<nbBlocs ; i++)
             {
-                float distance=listedesblocs[i].position.x-perso->px+perso->width;
+                float distance=listedesblocs[i].position.x-(perso->px+perso->width);
                 
                 if (distance>0 && distance<distanceMin 
                     && memePlanHorizontal(*perso,listedesblocs[i])==true
@@ -82,7 +82,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                 float distance=perso->px
                                 -(listedesblocs[i].position.x+listedesblocs[i].size.x);
                 
-                if (distance>0 && distance<distanceMin 
+                if (distance>=0 && distance<distanceMin 
                     && memePlanHorizontal(*perso,listedesblocs[i])==true
                     )
                 {

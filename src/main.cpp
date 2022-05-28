@@ -25,8 +25,14 @@ static const char WINDOW_TITLE[] = "Thomas was alone";
 /* Espace fenetre virtuelle */
 static const float GL_VIEW_SIZE = 720;
 
+/*Frames par seconde*/
+int framesPerSecond=240;
+
 /* Nombre minimal de millisecondes separant le rendu de deux images */
-static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 240;
+static const Uint32 FRAMERATE_MILLISECONDS = 1000 / framesPerSecond;
+
+/*Frames minimales entre chaque saut*/    
+int framesBetweenJumps=framesPerSecond/4;
 
 
 void onWindowResized(unsigned int width, unsigned int height)
@@ -132,8 +138,6 @@ int main(int argc, char** argv)
 
 
     Uint32 elapsedTime=0;
-    
-    int framesBetweenJumps=30;
 
     int framesToNextJump=0;
 
@@ -348,7 +352,7 @@ int main(int argc, char** argv)
                                 level = 1;
                             break;
                         case 1073741913: // pav. num. 1 
-                            if (level == 0)
+                            if (level != 0)
                                 level = 1;
                             break;
                         default:

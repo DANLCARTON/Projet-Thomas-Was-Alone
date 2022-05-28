@@ -8,4 +8,17 @@
 #include "../include/levels.hpp"
 #include "../include/personnages.hpp"
 
-// si on a le temps je ferai des fonctions séparées pour créer les niveaux mais là c'est cho
+void TitleScreen()
+{
+
+}
+
+void Level1()
+{
+    
+}
+
+void Level2()
+{
+    
+}
