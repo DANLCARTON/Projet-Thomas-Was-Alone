@@ -35,6 +35,22 @@ void drawGoal (Goal goal) {
     glPopMatrix();
 }
 
+void drawCurrentPersoCursor(Perso perso)
+{
+    glColor3f(1,1,1);
+    glPushMatrix(); 
+        glTranslatef(perso.px+perso.width/2, perso.py+10, 0);
+        glScalef(3, 3, 1);
+        glBegin(GL_LINE_STRIP);
+            glVertex2f(0, 0);
+            glVertex2f(1, 0);
+            glVertex2f(1, -1);
+            glVertex2f(0, -1);
+            glVertex2f(0, 0);
+        glEnd();
+    glPopMatrix();
+}
+
 Platform createPlatform (Point3D pos, Vector3D size) {
     Platform rect;
     rect.position = pos;

@@ -148,7 +148,7 @@ int main(int argc, char** argv)
     bool changementDePerso=false;
 
     int level = 0;
-    int nbLevel=1;
+    int nbLevel=2;
 
     /* Boucle principale */
     int loop = 1;
@@ -182,7 +182,7 @@ int main(int argc, char** argv)
 
         /*DESSIN*/
 
-        drawLevel(level, &nbPersos, &nbBlocs, listedespersos, listedesblocs, listedesgoals, currentPerso, &firstloop);
+        drawLevel(level, &nbPersos, &nbBlocs, listedespersos, listedesblocs, listedesgoals, &currentPerso, &firstloop, elapsedTime);
 
 
         /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -265,10 +265,10 @@ int main(int argc, char** argv)
                     printf("touche pressee (code = %d)\n", e.key.keysym.sym);
                     switch(e.key.keysym.sym)
                     {
-                        case 100: //d
+                        case 100: //d : droite
                             keys[1]=true;
                             break;
-                         case 113: //q
+                         case 113: //q : gauche
                             keys[0]=true;
                             break;
                         case 32: //Espace : Saut
@@ -287,7 +287,9 @@ int main(int argc, char** argv)
                                 currentPerso=0;
                             }
                             break;
-                        
+                        case 114://R : Recharger le niveau
+                            firstloop=true;
+                            break;
                         case 8: //Return
                             level=0;
                             break;

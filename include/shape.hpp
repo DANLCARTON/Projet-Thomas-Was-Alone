@@ -27,6 +27,7 @@ Goal createGoal(Perso perso, Point3D pos, Vector3D size);
 Platform createFond (ColorRGB color);
 void drawPlatform (Platform plat);
 void drawGoal (Goal goal);
+void drawCurrentPersoCursor(Perso perso);
 Platform solidifyCharacter(Perso perso);
 Platform maskPlatformCreatedFormCharacter(Platform plat);
 

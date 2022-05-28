@@ -6,6 +6,6 @@
 #include "text.hpp"
 
 void drawLevel(const int level, int* nbPersos, int* nbBlocs, Perso listedespersos[], Platform listedesblocs[], Goal listedesgoals[],
-            const int currentPerso, bool* firstloop);
+            int* currentPerso, bool* firstloop, const Uint32 elapsedTime);
 
 #endif

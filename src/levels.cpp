@@ -9,7 +9,7 @@
 #include "../include/levels.hpp"
 #include "../include/personnages.hpp"
 
-void draw(const int level, const int nbPersos, const int nbBlocs, const Perso listedespersos[],
+void draw(const int level, const int nbPersos, const int nbBlocs, const int currentPerso, const Perso listedespersos[],
         const Platform listedesblocs[], const Goal listedesgoals[])
 {
     for (int i = 0; i < nbBlocs; i++) {
@@ -18,6 +18,10 @@ void draw(const int level, const int nbPersos, const int nbBlocs, const Perso li
 
         for (int i = 0; i < nbPersos; i++) {
             drawPerso(listedespersos[i]);
+        }
+
+        if(level>0){
+        drawCurrentPersoCursor(listedespersos[currentPerso]);
         }
 
         for(int i=0; i < nbPersos; i++)
@@ -35,7 +39,7 @@ void draw(const int level, const int nbPersos, const int nbBlocs, const Perso li
 
         if (level == -1) {
             glColor3f(.5, .5, .5);
-            drawString(-350, 0, 0, "Bravo tu as passe le niveau, clique n'importe ou pour en choisir un autre au clavier.");
+            drawString(-350, 0, 0, "Bravo tu as passe le niveau, tu peux en choisir un autre au clavier.");
         }
 
         if (level == -2){
@@ -47,7 +51,7 @@ void draw(const int level, const int nbPersos, const int nbBlocs, const Perso li
 
 
 void drawLevel(const int level, int* nbPersos, int* nbBlocs, Perso listedespersos[], 
-Platform listedesblocs[], Goal listedesgoals[],const int currentPerso, bool* firstloop)
+Platform listedesblocs[], Goal listedesgoals[],int* currentPerso, bool* firstloop, const Uint32 elapsedTime)
 {
     if (level<=0)
     {
@@ -56,47 +60,125 @@ Platform listedesblocs[], Goal listedesgoals[],const int currentPerso, bool* fir
         *nbPersos=0;
     }
 
-    else if (level==1)
-    {
-            glTranslated(-listedespersos[currentPerso].px, -listedespersos[currentPerso].py, 0);
-            int b = 0;
-            if (*firstloop == true) {
-                int p = 0;
-                listedespersos[p] = createPerso(-140, -250, 0, 0, 50, 50, createColor(1, 0, 0)); 
-                drawPerso(listedespersos[p]); 
-                p++;   
-                listedespersos[p] = createPerso(100, 0, 0, 0, 50, 100, createColor(0, 255, 0)); 
-                drawPerso(listedespersos[p]); 
-                p++;
-                *nbPersos = p;
+    else if(level==1){
+
+        //PERSONNAGES
+        if (*firstloop == true) {
+            *currentPerso=0;
+            int p = 0;
+            listedespersos[p] = createPerso(-140, -250, 0, 0, 50, 50, createColor(1, 0, 0)); 
+            drawPerso(listedespersos[p]); 
+            p++;   
+            listedespersos[p] = createPerso(100, 0, 0, 0, 50, 100, createColor(0, 255, 0)); 
+            drawPerso(listedespersos[p]); 
+            p++;
+            *nbPersos = p;
+        }
+
+        //CAMERA
+        glTranslated(-listedespersos[*currentPerso].px, -listedespersos[*currentPerso].py, 0);
+
+        int b = 0;
+
+        //FOND
+        listedesblocs[b] = createFond(createColor(.1, .1, .1)); b++;
+
+        //BORDS
+        //Bord bas
+        listedesblocs[b] = createPlatform(createPoint(-640, -300, 0), createVector(1280, 60, 0)); b++;
+        //Bord gauche
+        listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(60, 720, 0)); b++;
+        //Bord droit
+        listedesblocs[b] = createPlatform(createPoint(580, 360, 0), createVector(60, 720, 0)); b++;
+        //Bord haut
+        listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(1280, 60, 0)); b++;
+        
+        //PLATEFORMES
+        //Plateforme bas droite
+        listedesblocs[b] = createPlatform(createPoint(-50, -100, 0), createVector(100, 100, 0)); b++;
+        //Plateforme haut gauche
+        listedesblocs[b] = createPlatform(createPoint(-300, 220, 0), createVector(70, 130, 0)); b++;
+       
+        //Transforme le personnage non joué en plateforme
+        for (int i = 0; i < *nbPersos; i++) {
+            if (listedespersos[*currentPerso].color.r == listedesblocs[b].color.r && listedespersos[*currentPerso].color.g == listedesblocs[b].color.g && listedespersos[*currentPerso].color.b == listedesblocs[b].color.b) {
+                listedesblocs[b] = maskPlatformCreatedFormCharacter(listedesblocs[b]);
             }
-            listedesblocs[b] = createFond(createColor(.1, .1, .1)); b++;
-            listedesblocs[b] = createPlatform(createPoint(-640, -300, 0), createVector(1280, 60, 0)); b++;
-            listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(60, 720, 0)); b++;
-            listedesblocs[b] = createPlatform(createPoint(580, 360, 0), createVector(60, 720, 0)); b++;
-            listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(1280, 60, 0)); b++;
-            listedesblocs[b] = createPlatform(createPoint(-50, -100, 0), createVector(100, 100, 0)); b++;
-            listedesblocs[b] = createPlatform(createPoint(-300, 220, 0), createVector(70, 130, 0)); b++;
-            for (int i = 0; i < *nbPersos; i++) {
-                if (listedespersos[currentPerso].color.r == listedesblocs[b].color.r && listedespersos[currentPerso].color.g == listedesblocs[b].color.g && listedespersos[currentPerso].color.b == listedesblocs[b].color.b) {
-                    listedesblocs[b] = maskPlatformCreatedFormCharacter(listedesblocs[b]);
-                }
-                if (listedespersos[currentPerso].color.r != listedespersos[i].color.r || listedespersos[currentPerso].color.g != listedespersos[i].color.g || listedespersos[currentPerso].color.b != listedespersos[i].color.b) {
-                    listedesblocs[b] = solidifyCharacter(listedespersos[i]); b++;
-                }
+            if (listedespersos[*currentPerso].color.r != listedespersos[i].color.r || listedespersos[*currentPerso].color.g != listedespersos[i].color.g || listedespersos[*currentPerso].color.b != listedespersos[i].color.b) {
+                listedesblocs[b] = solidifyCharacter(listedespersos[i]); b++;
             }
-            if (*firstloop == true) {
-                *nbBlocs = b;
-                *firstloop = false;
-            }
-            int g = 0;
-            listedesgoals[g] = createGoal(listedespersos[g], createPoint(-290, 270, 0), createVector(listedespersos[g].width, listedespersos[g].height, 0)); g++;
-            listedesgoals[g] = createGoal(listedespersos[g], createPoint(140, -250, 0), createVector(listedespersos[g].width, listedespersos[g].height, 0)); g++;
-            
+        }
+        if (*firstloop == true) {
+            *nbBlocs = b;
+            *firstloop = false;
+        }
+
+        //OBJECTIFS
+        int g = 0;
+        listedesgoals[g] = createGoal(listedespersos[g], createPoint(-290, 270, 0), createVector(listedespersos[g].width, listedespersos[g].height, 0)); g++;
+        listedesgoals[g] = createGoal(listedespersos[g], createPoint(140, -250, 0), createVector(listedespersos[g].width, listedespersos[g].height, 0)); g++;
+        
     }
 
     else if(level==2){
+
+        //PERSONNAGES
+        if (*firstloop == true) {
+            *currentPerso=0;
+            int p = 0;
+            listedespersos[p] = createPerso(-140, -250, 0, 0, 50, 50, createColor(1, 0, 0)); 
+            drawPerso(listedespersos[p]); 
+            p++;   
+            listedespersos[p] = createPerso(100, 0, 0, 0, 50, 100, createColor(0, 255, 0)); 
+            drawPerso(listedespersos[p]); 
+            p++;
+            *nbPersos = p;
+        }
+        
+        //CAMERA
+        glTranslated(-listedespersos[*currentPerso].px, -listedespersos[*currentPerso].py, 0);
+
+        int b = 0;
+
+        //FOND
+        listedesblocs[b] = createFond(createColor(.1, .1, .1)); b++;
+
+        //BORDS
+        //Bord bas
+        listedesblocs[b] = createPlatform(createPoint(-640, -300, 0), createVector(1280, 60, 0)); b++;
+        //Bord gauche
+        listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(60, 720, 0)); b++;
+        //Bord droit
+        listedesblocs[b] = createPlatform(createPoint(580, 360, 0), createVector(60, 720, 0)); b++;
+        //Bord haut
+        listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(1280, 60, 0)); b++;
+        
+        //PLATEFORMES
+        //Plateforme bas droite
+        listedesblocs[b] = createPlatform(createPoint(-50, -100, 0), createVector(100, 100, 0)); b++;
+        //Plateforme haut gauche
+        listedesblocs[b] = createPlatform(createPoint(-300, 220, 0), createVector(70, 130, 0)); b++;
+       
+        //Transforme le personnage non joué en plateforme
+        for (int i = 0; i < *nbPersos; i++) {
+            if (listedespersos[*currentPerso].color.r == listedesblocs[b].color.r && listedespersos[*currentPerso].color.g == listedesblocs[b].color.g && listedespersos[*currentPerso].color.b == listedesblocs[b].color.b) {
+                listedesblocs[b] = maskPlatformCreatedFormCharacter(listedesblocs[b]);
+            }
+            if (listedespersos[*currentPerso].color.r != listedespersos[i].color.r || listedespersos[*currentPerso].color.g != listedespersos[i].color.g || listedespersos[*currentPerso].color.b != listedespersos[i].color.b) {
+                listedesblocs[b] = solidifyCharacter(listedespersos[i]); b++;
+            }
+        }
+        if (*firstloop == true) {
+            *nbBlocs = b;
+            *firstloop = false;
+        }
+
+        //OBJECTIFS
+        int g = 0;
+        listedesgoals[g] = createGoal(listedespersos[g], createPoint(-290, 270, 0), createVector(listedespersos[g].width, listedespersos[g].height, 0)); g++;
+        listedesgoals[g] = createGoal(listedespersos[g], createPoint(140, -250, 0), createVector(listedespersos[g].width, listedespersos[g].height, 0)); g++;
+        
     }
 
-    draw(level, *nbPersos, *nbBlocs, listedespersos, listedesblocs, listedesgoals);
+    draw(level, *nbPersos, *nbBlocs, *currentPerso, listedespersos, listedesblocs, listedesgoals);
 }
