@@ -4,7 +4,7 @@
 #include "../include/personnages.hpp"
 #include "../include/quad_tree.hpp"
 
-int m=60; //doit être identique au n de personnages.cpp
+int m = 60; //doit être identique au n de personnages.cpp
 
 int ecartPositionVictoire=5;
 
@@ -38,12 +38,12 @@ bool memePlanVertical(const Perso perso, const Platform bloc)
     return true;   
 }
 
-void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, Platform listedesblocs[], const Uint32 elapsedTime, Quadtree quadtree, int currentPerso) 
+void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, Platform listedesblocs[], const Uint32 elapsedTime, Quadtree quadtree) 
 {
-    Perso perso = listedespersos[currentPerso];
+    // Perso perso = listedespersos[currentPerso];
 
-    if (DetectePersoInLeaf (perso, quadtree) == true)
-    {
+    // if (DetectePersoInLeaf (perso, quadtree) == true)
+    // {
         for (int n=0; n<nbPersos; n++)
         {
             Perso* perso=&listedespersos[n];
@@ -56,7 +56,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, Pl
                     float distanceMin=10000000000000000000000.0f;
                     int obstacleIndex=NULL;
 
-                    for (int i = 0 ; i < nbCollisionInLeaf(listedesblocs, quadtree, nbBlocs, nbPersos, listedespersos) ; i++)
+                    for (int i = 0 ; i < nbBlocs ; i++)
                     {
                         float distance=listedesblocs[i].position.x-(perso->px+perso->width);
                         
@@ -87,7 +87,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, Pl
                     float distanceMin=10000000000000000000000.0f;
                     int obstacleIndex=NULL;
 
-                    for (int i = 0 ; i < nbCollisionInLeaf(listedesblocs, quadtree, nbBlocs, nbPersos, listedespersos) ; i++)
+                    for (int i = 0 ; i < nbBlocs ; i++)
                     {
                         float distance=perso->px
                                         -(listedesblocs[i].position.x+listedesblocs[i].size.x);
@@ -119,7 +119,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, Pl
                     float distanceMin=10000000000000000000000.0f;
                     int obstacleIndex=NULL;
 
-                    for (int i = 0 ; i < nbCollisionInLeaf(listedesblocs, quadtree, nbBlocs, nbPersos, listedespersos) ; i++)
+                    for (int i = 0 ; i < nbBlocs ; i++)
                     {
                         float distance=listedesblocs[i].position.y-listedesblocs[i].size.y - perso->py;
                         
@@ -150,7 +150,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, Pl
                     float distanceMin=10000000000000000000000.0f;
                     int obstacleIndex=NULL;
 
-                    for (int i = 0 ; i < nbCollisionInLeaf(listedesblocs, quadtree, nbBlocs, nbPersos, listedespersos) ; i++)
+                    for (int i = 0 ; i < nbBlocs ; i++)
                     {
                         float distance=perso->py-perso->height - listedesblocs[i].position.y;
                         
@@ -183,7 +183,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, Pl
                     float distanceMin=10000000000000000000000.0f;
                     int obstacleIndex=NULL;
 
-                    for (int i = 0 ; i < nbCollisionInLeaf(listedesblocs, quadtree, nbBlocs, nbPersos, listedespersos) ; i++)
+                    for (int i = 0 ; i < nbBlocs ; i++)
                     {
                         float distance=listedesblocs[i].position.y-listedesblocs[i].size.y - perso->py;
                         
@@ -214,7 +214,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, Pl
                     float distanceMin=10000000000000000000000.0f;
                     int obstacleIndex=NULL;
 
-                    for (int i = 0 ; i < nbCollisionInLeaf(listedesblocs, quadtree, nbBlocs, nbPersos, listedespersos) ; i++)
+                    for (int i = 0 ; i < nbBlocs ; i++)
                     {
                         float distance=perso->py-perso->height - listedesblocs[i].position.y;
                         
@@ -245,7 +245,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, Pl
                     float distanceMin=10000000000000000000000.0f;
                     int obstacleIndex=NULL;
 
-                    for (int i = 0 ; i < nbCollisionInLeaf(listedesblocs, quadtree, nbBlocs, nbPersos, listedespersos) ; i++)
+                    for (int i = 0 ; i < nbBlocs ; i++)
                     {
                         float distance=listedesblocs[i].position.x-(perso->px+perso->width);
                         
@@ -276,7 +276,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, Pl
                     float distanceMin=10000000000000000000000.0f;
                     int obstacleIndex=NULL;
 
-                    for (int i = 0 ; i < nbCollisionInLeaf(listedesblocs, quadtree, nbBlocs, nbPersos, listedespersos) ; i++)
+                    for (int i = 0 ; i < nbBlocs ; i++)
                     {
                         float distance=perso->px
                                         -(listedesblocs[i].position.x+listedesblocs[i].size.x);
@@ -304,7 +304,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, Pl
                 }
             }
         }
-    }
+    // }
 }
 
 

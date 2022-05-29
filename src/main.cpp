@@ -133,10 +133,11 @@ int main (int argc, char** argv)
     int currentPerso = 0;
     int nbPersos;
 
+    Quadtree quadtree;
     Platform listedesblocs[100];
     Goal listedesgoals[100];
     Perso listedespersos[100];
-    Quadtree quadtree;
+
 
     bool firstloop = true;
 
@@ -370,7 +371,7 @@ int main (int argc, char** argv)
 
 
         //Gestion des collisions et déplacements
-        collision(nbPersos, listedespersos, nbBlocs, listedesblocs, elapsedTime, quadtree, currentPerso);
+        collision(nbPersos, listedespersos, nbBlocs, listedesblocs, elapsedTime, quadtree);
         listedespersos[currentPerso].move(elapsedTime);
 
         if(!checkGround(listedespersos[currentPerso],nbBlocs,listedesblocs))
