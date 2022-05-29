@@ -8,6 +8,7 @@
 #include "../include/colors.hpp"
 #include "../include/levels.hpp"
 #include "../include/personnages.hpp"
+#include "../include/quad_tree.hpp"
 
 
 const int mapN1X = 1280;
@@ -87,6 +88,20 @@ Platform listedesblocs[], Goal listedesgoals[],int* currentPerso, bool* firstloo
         glTranslated(-(listedespersos[*currentPerso].px+(listedespersos[*currentPerso].width/2)), -(listedespersos[*currentPerso].py-(listedespersos[*currentPerso].height/2)), 0);
 
         int b = 0;
+
+        // Quadtree
+        // Point3D pointHGL1;
+        // pointHGL1.x = mapN1X / 2;
+        // pointHGL1.y = mapN1Y / 2;
+
+        // Vector3D diagHGL1;
+        // diagHGL1.x = mapN1X;s
+        // diagHGL1.y = mapN1Y;
+
+        // Map mapL1 = createMap (pointHGL1, diagHGL1);
+        // Quadtree QtL1 = create_QuadTree (mapL1);
+        
+        // AppliqueQuadTree(mapL1, listedespersos, currentPerso, nbBlocs, nbPersos);
 
         //FOND
         listedesblocs[b] = createFond(createColor(.1, .1, .1)); b++;

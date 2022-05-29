@@ -10,7 +10,7 @@
 #include "../include/personnages.hpp"
 
 
-const int MinFC = 4;
+const int MaxFC = 4;
 
 Map createMap (Point3D pointHG, Vector3D taille)
 {
@@ -79,8 +79,14 @@ Map zoneLeaf (Map map)
 
     if (is_leaf (quadtree) == false)
     {
+        quadtree.qtx = 0;
+        quadtree.qty = 0;
+        quadtree.qtw = 0;
+        quadtree.qth = 0;
+
         return map;
     }
+    
     else
     {
         quadtree.qtx = map.x;
@@ -201,22 +207,22 @@ void AppliqueQuadTree (Map map,  Perso listedespersos[], Platform listedesblocs[
 {
     Quadtree quadtree = create_QuadTree (map);
 
-    if (nbCollisionInLeaf(listedesblocs, *quadtree.northwest_child, nbBlocs, nbPersos, listedespersos) < MinFC)
+    if (nbCollisionInLeaf(listedesblocs, *quadtree.northwest_child, nbBlocs, nbPersos, listedespersos) < MaxFC)
     {
         quadtree.northwest_child = NULL;
     }
 
-    else if (nbCollisionInLeaf(listedesblocs, *quadtree.northeast_child, nbBlocs, nbPersos, listedespersos) < MinFC)
+    else if (nbCollisionInLeaf(listedesblocs, *quadtree.northeast_child, nbBlocs, nbPersos, listedespersos) < MaxFC)
     {
         quadtree.northeast_child = NULL;
     }
 
-    else if (nbCollisionInLeaf(listedesblocs, *quadtree.southwest_child, nbBlocs, nbPersos, listedespersos) < MinFC)
+    else if (nbCollisionInLeaf(listedesblocs, *quadtree.southwest_child, nbBlocs, nbPersos, listedespersos) < MaxFC)
     {
         quadtree.southwest_child = NULL;
     }
 
-    else if (nbCollisionInLeaf(listedesblocs, *quadtree.southeast_child, nbBlocs, nbPersos, listedespersos) < MinFC)
+    else if (nbCollisionInLeaf(listedesblocs, *quadtree.southeast_child, nbBlocs, nbPersos, listedespersos) < MaxFC)
     {
         quadtree.southeast_child = NULL;
     }

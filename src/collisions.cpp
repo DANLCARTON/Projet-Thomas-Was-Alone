@@ -38,6 +38,8 @@ bool memePlanVertical(const Perso perso, const Platform bloc)
     return true;   
 }
 
+
+// essaie d'implémenter le quadtree via "DetectePersoInLeaf" et "nbCollisionInLeaf" mais ce fut un echec
 void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, Platform listedesblocs[], const Uint32 elapsedTime, Quadtree quadtree) 
 {
     // Perso perso = listedespersos[currentPerso];
@@ -48,49 +50,48 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, Pl
         {
             Perso* perso=&listedespersos[n];
 
-            if (std::abs(perso->vx)>std::abs(perso->vy))
+            if (std::abs(perso->vx) > std::abs(perso->vy))
             {
 
-                if ((perso->vx)/(2*m) > 0) //droite
+                if ((perso->vx) /(2 * m) > 0) //droite
                 {
-                    float distanceMin=10000000000000000000000.0f;
-                    int obstacleIndex=NULL;
+                    float distanceMin = 10000000000000000000000.0f;
+                    int obstacleIndex = NULL;
 
                     for (int i = 0 ; i < nbBlocs ; i++)
                     {
-                        float distance=listedesblocs[i].position.x-(perso->px+perso->width);
+                        float distance = listedesblocs[i].position.x-(perso->px + perso->width);
                         
-                        if (distance>=0 && distance<distanceMin 
-                            && memePlanHorizontal(*perso,listedesblocs[i])==true
+                        if (distance >= 0 && distance < distanceMin 
+                            && memePlanHorizontal(*perso,listedesblocs[i]) == true
                             )
                         {
                             distanceMin=distance;
                             obstacleIndex=i;
                         }
                     }
-                    if(obstacleIndex)
+                    if (obstacleIndex)
                     {
-                        float positionBordObstacle=listedesblocs[obstacleIndex].position.x;
-                        float futurePositionBordPerso=perso->px+(perso->vx)/(2*m)*elapsedTime+perso->width;
+                        float positionBordObstacle = listedesblocs[obstacleIndex].position.x;
+                        float futurePositionBordPerso = perso->px + (perso->vx) / (2*m)*elapsedTime + perso->width;
                     
                         // si le perso rentre dans l'obstacle
                         if (positionBordObstacle - futurePositionBordPerso < 0 && listedesblocs[obstacleIndex].solid != 0) 
                         {
-                            perso->vx=0;
-                            perso->px = positionBordObstacle-perso->width-1;
+                            perso->vx = 0;
+                            perso->px = positionBordObstacle - perso->width-1;
                         }
                     }
                 }
 
-                else if ((perso->vx)/(2*m) < 0) //gauche
+                else if ((perso->vx) / (2*m) < 0) //gauche
                 {
-                    float distanceMin=10000000000000000000000.0f;
-                    int obstacleIndex=NULL;
+                    float distanceMin = 10000000000000000000000.0f;
+                    int obstacleIndex = NULL;
 
                     for (int i = 0 ; i < nbBlocs ; i++)
                     {
-                        float distance=perso->px
-                                        -(listedesblocs[i].position.x+listedesblocs[i].size.x);
+                        float distance = perso->px -(listedesblocs[i].position.x+listedesblocs[i].size.x);
                         
                         if (distance>=0 && distance<distanceMin 
                             && memePlanHorizontal(*perso,listedesblocs[i])==true

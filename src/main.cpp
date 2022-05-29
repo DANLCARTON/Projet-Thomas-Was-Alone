@@ -137,7 +137,7 @@ int main (int argc, char** argv)
     Platform listedesblocs[100];
     Goal listedesgoals[100];
     Perso listedespersos[100];
-
+    Map map;
 
     bool firstloop = true;
 
@@ -378,6 +378,10 @@ int main (int argc, char** argv)
         {
             listedespersos[currentPerso].fall(elapsedTime);
         }
+
+        // Quadtree
+        // AppliqueQuadTree (map, listedespersos[currentPerso], listedesblocs, currentPerso, nbBlocs, nbPersos);
+        //
 
         
         /* Calcul du temps ecoule */

@@ -7,6 +7,7 @@
 #include "shape.hpp"
 #include "personnages.hpp"
 
+
 typedef struct Quadtree {
     float qtx;
     float qty;
@@ -19,15 +20,6 @@ typedef struct Quadtree {
     struct Quadtree *parent; 
 } Quadtree;
 
-// typedef struct DataNode {
-//     int Xmap;
-//     int Ymap;
-//     Point3D NOpoint;
-//     Point3D NEpoint;
-//     Point3D SOpoint;
-//     Point3D SEpoint;
-//     int capacite;
-// } DataNode;
 
 typedef struct Map {
     float x;
@@ -37,11 +29,6 @@ typedef struct Map {
 } Map;
 
 
-// Quadtree *new_quad_tree (int x, int y);
-// void clean_tree (Quadtree *tr);
-// Quadtree *join_tree(Quadtree *northwest_child, Quadtree *northeast_child, Quadtree *southwest_child, Quadtree southeast_child, int node);
-// void print_tree (Quadtree *tr);
-// int nodesCount (Quadtree *tr);
 Map createMap (Point3D pointHG, Vector3D taille);
 Quadtree create_QuadTree (Map map);
 bool if_leaf (Quadtree quadtree);
