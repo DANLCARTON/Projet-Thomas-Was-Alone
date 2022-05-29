@@ -138,6 +138,9 @@ int main(int argc, char** argv)
 
     bool firstloop = true;
 
+    //pour les mouvements des plateformes mobiles
+    int cycle=0; 
+    int dirCycle=1; 
 
     Uint32 elapsedTime=0;
 
@@ -148,7 +151,7 @@ int main(int argc, char** argv)
     bool changementDePerso=false;
 
     int level = 0;
-    int nbLevel=2;
+    int nbLevel=3;
 
     /* Boucle principale */
     int loop = 1;
@@ -182,7 +185,8 @@ int main(int argc, char** argv)
 
         /*DESSIN*/
 
-        drawLevel(level, &nbPersos, &nbBlocs, listedespersos, listedesblocs, listedesgoals, &currentPerso, &firstloop, elapsedTime);
+        drawLevel(level, &nbPersos, &nbBlocs, listedespersos, listedesblocs, listedesgoals, 
+        &currentPerso, &firstloop, framesPerSecond, &cycle, &dirCycle, elapsedTime);
 
 
         /* - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -234,7 +238,7 @@ int main(int argc, char** argv)
                     }
             }
 
-            switch(e.type) 
+            switch(e.type)  //autres entrées utilisateur
             {
                 case SDL_WINDOWEVENT:
                     switch (e.window.event) 
@@ -294,24 +298,46 @@ int main(int argc, char** argv)
                             level=0;
                             break;
                         case 49: // 1
-                            if (level <= 0)
+                            if (level <= 0) 
+                            {
                                 level = 1;
                                 firstloop = true;
+                            }
                             break;
                         case 1073741913: // pav. num. 1 
                             if (level <= 0)
+                            {
                                 level = 1;
                                 firstloop = true;
+                            }
                             break;
                         case 50: //2
                             if (level <= 0)
+                            {
                                 level=2;
                                 firstloop = true;
+                            }
                             break;
                         case 1073741914: // pav. num. 2
-                            if (level <= 0)
-                                level=2;
+                            if (level <= 0)                            
+                            {
+                                level = 2;
                                 firstloop = true;
+                            }
+                            break;
+                                  case 51: //3
+                            if (level <= 0)
+                            {
+                                level = 3;
+                                firstloop = true;
+                            }
+                            break;
+                        case 1073741915: // pav. num. 3
+                            if (level <= 0)
+                            {
+                                level = 3;
+                                firstloop = true;
+                            }
                             break;
 
                         default:

@@ -196,13 +196,13 @@ int nbCollisionInLeaf(Platform listedesblocs[], Quadtree quadtree, const int nbB
 }
 
 
-void AppliqueQuadTree (Map map, Platform listedesblocs[], const Perso perso, const int nbBlocs, const int nbPersos)
-{
-    Quadtree quadtree = create_QuadTree (map);
-    nbCollisionInLeaf(listedesblocs, quadtree, nbBlocs, nbPersos, listedespersos);
-
-}
-
+//void AppliqueQuadTree (Map map, Platform listedesblocs[], const Perso perso, const int nbBlocs, const int nbPersos)
+//{
+    //Quadtree quadtree = create_QuadTree (map);
+    //nbCollisionInLeaf(listedesblocs, quadtree, nbBlocs, nbPersos, listedespersos);
+//
+//}
+//
 
 
 // Quadtree *new_quad_tree(int x, int y)
