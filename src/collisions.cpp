@@ -46,7 +46,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
         if (std::abs(perso->vx)>std::abs(perso->vy))
         {
 
-            if ((perso->vx)/(2*m) > 0) //droite
+            if ((perso->vx)/(2*m) >= 0) //droite
             {
                 float distanceMin=10000000000000000000000.0f;
                 int obstacleIndex=NULL;
@@ -69,7 +69,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                     float futurePositionBordPerso=perso->px+(perso->vx)/(2*m)*elapsedTime+perso->width;
                 
                     // si le perso rentre dans l'obstacle
-                    if (positionBordObstacle - futurePositionBordPerso < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    if (positionBordObstacle - futurePositionBordPerso <= 0 && listedesblocs[obstacleIndex].solid != 0) 
                     {
                         perso->vx=0;
                         perso->px = positionBordObstacle-perso->width-1;
@@ -77,7 +77,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                 }
             }
 
-            else if ((perso->vx)/(2*m) < 0) //gauche
+            else if ((perso->vx)/(2*m) <= 0) //gauche
             {
                 float distanceMin=10000000000000000000000.0f;
                 int obstacleIndex=NULL;
@@ -101,7 +101,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                     float futurePositionBordPerso=perso->px+(perso->vx)/(2*m)*elapsedTime;
                 
                     // si le perso rentre dans l'obstacle
-                    if (futurePositionBordPerso - positionBordObstacle < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    if (futurePositionBordPerso - positionBordObstacle <= 0 && listedesblocs[obstacleIndex].solid != 0) 
                     {
                         perso->vx=0;
                         perso->px = positionBordObstacle+1;
@@ -109,7 +109,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                 }
             }
 
-            if ((perso->vy)/(2*m) > 0) //haut
+            if ((perso->vy)/(2*m) >= 0) //haut
             {
                 float distanceMin=10000000000000000000000.0f;
                 int obstacleIndex=NULL;
@@ -132,7 +132,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                     float futurePositionBordPerso=perso->py+(perso->vy)/(2*m)*elapsedTime;
                 
                     // si le perso rentre dans l'obstable
-                    if (positionBordObstacle - futurePositionBordPerso < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    if (positionBordObstacle - futurePositionBordPerso <= 0 && listedesblocs[obstacleIndex].solid != 0) 
                     {
                         perso->vy=0;
                         perso->py = positionBordObstacle-1;
@@ -140,7 +140,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                 }
             }
 
-            else if ((perso->vy)/(2*m) < 0) //bas
+            else if ((perso->vy)/(2*m) <= 0) //bas
             {
                 float distanceMin=10000000000000000000000.0f;
                 int obstacleIndex=NULL;
@@ -163,7 +163,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                     float futurePositionBordPerso=perso->py+(perso->vy)/(2*m)*elapsedTime-perso->height;
                 
                     // si le perso rentre dans l'obstable
-                    if (futurePositionBordPerso - positionBordObstacle < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    if (futurePositionBordPerso - positionBordObstacle <= 0 && listedesblocs[obstacleIndex].solid != 0) 
                     {
                         perso->vy=0;
                         perso->py = positionBordObstacle+perso->height+1;
@@ -173,7 +173,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
         }
         else 
         {
-            if ((perso->vy)/(2*m) > 0) //haut
+            if ((perso->vy)/(2*m) >= 0) //haut
             {
                 float distanceMin=10000000000000000000000.0f;
                 int obstacleIndex=NULL;
@@ -196,7 +196,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                     float futurePositionBordPerso=perso->py+(perso->vy)/(2*m)*elapsedTime;
                 
                     // si le perso rentre dans l'obstable
-                    if (positionBordObstacle - futurePositionBordPerso < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    if (positionBordObstacle - futurePositionBordPerso <= 0 && listedesblocs[obstacleIndex].solid != 0) 
                     {
                         perso->vy=0;
                         perso->py = positionBordObstacle-1;
@@ -204,7 +204,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                 }
             }
 
-            else if ((perso->vy)/(2*m) < 0) //bas
+            else if ((perso->vy)/(2*m) <= 0) //bas
             {
                 float distanceMin=10000000000000000000000.0f;
                 int obstacleIndex=NULL;
@@ -227,7 +227,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                     float futurePositionBordPerso=perso->py+(perso->vy)/(2*m)*elapsedTime-perso->height;
                 
                     // si le perso rentre dans l'obstable
-                    if (futurePositionBordPerso - positionBordObstacle < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    if (futurePositionBordPerso - positionBordObstacle <= 0 && listedesblocs[obstacleIndex].solid != 0) 
                     {
                         perso->vy=0;
                         perso->py = positionBordObstacle+perso->height+1;
@@ -235,7 +235,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                 }
             }
 
-            if ((perso->vx)/(2*m) > 0) //droite
+            if ((perso->vx)/(2*m) >= 0) //droite
             {
                 float distanceMin=10000000000000000000000.0f;
                 int obstacleIndex=NULL;
@@ -258,7 +258,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                     float futurePositionBordPerso=perso->px+(perso->vx)/(2*m)*elapsedTime+perso->width;
                 
                     // si le perso rentre dans l'obstacle
-                    if (positionBordObstacle - futurePositionBordPerso < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    if (positionBordObstacle - futurePositionBordPerso <= 0 && listedesblocs[obstacleIndex].solid != 0) 
                     {
                         perso->vx=0;
                         perso->px = positionBordObstacle-perso->width-1;
@@ -266,7 +266,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                 }
             }
 
-            else if ((perso->vx)/(2*m) < 0) //gauche
+            else if ((perso->vx)/(2*m) <= 0) //gauche
             {
                 float distanceMin=10000000000000000000000.0f;
                 int obstacleIndex=NULL;
@@ -290,7 +290,7 @@ void collision(const int nbPersos, Perso listedespersos[], const int nbBlocs, co
                     float futurePositionBordPerso=perso->px+(perso->vx)/(2*m)*elapsedTime;
                 
                     // si le perso rentre dans l'obstacle
-                    if (futurePositionBordPerso - positionBordObstacle < 0 && listedesblocs[obstacleIndex].solid != 0) 
+                    if (futurePositionBordPerso - positionBordObstacle <= 0 && listedesblocs[obstacleIndex].solid != 0) 
                     {
                         perso->vx=0;
                         perso->px = positionBordObstacle+1;
