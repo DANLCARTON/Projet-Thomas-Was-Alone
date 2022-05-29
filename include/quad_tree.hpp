@@ -19,15 +19,15 @@ typedef struct Quadtree {
     struct Quadtree *parent; 
 } Quadtree;
 
-typedef struct DataNode {
-    int Xmap;
-    int Ymap;
-    Point3D NOpoint;
-    Point3D NEpoint;
-    Point3D SOpoint;
-    Point3D SEpoint;
-    int capacite;
-} DataNode;
+// typedef struct DataNode {
+//     int Xmap;
+//     int Ymap;
+//     Point3D NOpoint;
+//     Point3D NEpoint;
+//     Point3D SOpoint;
+//     Point3D SEpoint;
+//     int capacite;
+// } DataNode;
 
 typedef struct Map {
     float x;

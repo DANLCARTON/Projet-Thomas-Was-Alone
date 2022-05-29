@@ -10,6 +10,8 @@
 #include "../include/personnages.hpp"
 
 
+const int MinFC = 4;
+
 Map createMap (Point3D pointHG, Vector3D taille)
 {
     Map map;
@@ -91,7 +93,7 @@ Map zoneLeaf (Map map)
 }
 
 
-bool DetectePersoInLeaf (const Perso perso, Quadtree quadtree)
+bool DetectePersoInLeaf (Perso perso, Quadtree quadtree)
 {
     if (is_leaf (quadtree) == false)
     {
@@ -130,7 +132,6 @@ int BlocsInLeaf(Platform listedesblocs[], Quadtree quadtree, const int nbBlocs)
         }
         return BlocL;
     }
-
 }
 
 
@@ -195,12 +196,65 @@ int nbCollisionInLeaf(Platform listedesblocs[], Quadtree quadtree, const int nbB
     }
 }
 
-
-void AppliqueQuadTree (Map map, Platform listedesblocs[], const Perso perso, const int nbBlocs, const int nbPersos)
+ 
+void AppliqueQuadTree (Map map,  Perso listedespersos[], Platform listedesblocs[], const Perso perso, const int nbBlocs, const int nbPersos)
 {
     Quadtree quadtree = create_QuadTree (map);
-    nbCollisionInLeaf(listedesblocs, quadtree, nbBlocs, nbPersos, listedespersos);
 
+    if (nbCollisionInLeaf(listedesblocs, *quadtree.northwest_child, nbBlocs, nbPersos, listedespersos) < MinFC)
+    {
+        quadtree.northwest_child = NULL;
+    }
+
+    else if (nbCollisionInLeaf(listedesblocs, *quadtree.northeast_child, nbBlocs, nbPersos, listedespersos) < MinFC)
+    {
+        quadtree.northeast_child = NULL;
+    }
+
+    else if (nbCollisionInLeaf(listedesblocs, *quadtree.southwest_child, nbBlocs, nbPersos, listedespersos) < MinFC)
+    {
+        quadtree.southwest_child = NULL;
+    }
+
+    else if (nbCollisionInLeaf(listedesblocs, *quadtree.southeast_child, nbBlocs, nbPersos, listedespersos) < MinFC)
+    {
+        quadtree.southeast_child = NULL;
+    }
+
+    else
+    {
+        Map mapNW;
+        mapNW.x = map.x;
+        mapNW.y = map.y;
+        mapNW.w = map.x / 2;
+        mapNW.h = map.y / 2;
+
+        AppliqueQuadTree (mapNW, listedespersos, listedesblocs, perso, nbBlocs, nbPersos);
+
+        Map mapNE;
+        mapNE.x = map.x + map.h / 2;
+        mapNE.y = map.y;
+        mapNE.w = map.x / 2;
+        mapNE.h = map.y / 2;
+
+        AppliqueQuadTree (mapNE, listedespersos, listedesblocs, perso, nbBlocs, nbPersos);
+
+        Map mapSW;
+        mapSW.x = map.x / 2;
+        mapSW.y = map.y;
+        mapSW.w = map.x / 2;
+        mapSW.h = map.y / 2;
+
+        AppliqueQuadTree (mapSW, listedespersos, listedesblocs, perso, nbBlocs, nbPersos);
+
+        Map mapSE;
+        mapSE.x = map.x + map.h / 2;
+        mapSE.y = map.y / 2;
+        mapSE.w = map.x / 2;
+        mapSE.h = map.y / 2;
+
+        AppliqueQuadTree (mapSE, listedespersos, listedesblocs, perso, nbBlocs, nbPersos);
+    }
 }
 
 

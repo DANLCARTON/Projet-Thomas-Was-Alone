@@ -9,6 +9,14 @@
 #include "../include/levels.hpp"
 #include "../include/personnages.hpp"
 
+
+const int mapN1X = 1280;
+const int mapN1Y = 720;
+
+const int mapN2X = 1920;
+const int mapN2Y = 1280;
+
+
 void draw(const int level, const int nbPersos, const int nbBlocs, const int currentPerso, const Perso listedespersos[],
         const Platform listedesblocs[], const Goal listedesgoals[])
 {
@@ -39,7 +47,7 @@ void draw(const int level, const int nbPersos, const int nbBlocs, const int curr
 
         if (level == -1) {
             glColor3f(.5, .5, .5);
-            drawString(-350, 0, 0, "Bravo tu as passe le niveau, tu peux en choisir un autre au clavier.");
+            drawString(-350, 0, 0, "Bravo tu as passé le niveau, tu peux en choisir un autre au clavier.");
         }
 
         if (level == -2){

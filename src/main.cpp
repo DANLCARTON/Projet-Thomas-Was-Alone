@@ -16,6 +16,7 @@
 #include "../include/levels.hpp"
 #include "../include/collisions.hpp"
 #include "../include/text.hpp"
+#include "../include/quad_tree.hpp"
 
 /* Dimensions initiales et titre de la fenetre */
 static const unsigned int WINDOW_WIDTH = 1280;
@@ -26,23 +27,23 @@ static const char WINDOW_TITLE[] = "Thomas was alone";
 static const float GL_VIEW_SIZE = 720;
 
 /*Frames par seconde*/
-int framesPerSecond=240;
+int framesPerSecond = 240;
 
 /* Nombre minimal de millisecondes separant le rendu de deux images */
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / framesPerSecond;
 
 /*Frames minimales entre chaque saut*/    
-int framesBetweenJumps=framesPerSecond/4;
+int framesBetweenJumps=framesPerSecond / 4;
 
 
-void onWindowResized(unsigned int width, unsigned int height)
+void onWindowResized (unsigned int width, unsigned int height)
 { 
     float aspectRatio = width / (float) height;
 
-    glViewport(0, 0, width, height);
-    glMatrixMode(GL_PROJECTION);
+    glViewport (0, 0, width, height);
+    glMatrixMode (GL_PROJECTION);
     glLoadIdentity();
-    if( aspectRatio > 1) 
+    if (aspectRatio > 1) 
     {
         gluOrtho2D(
         -GL_VIEW_SIZE / 2. * aspectRatio, GL_VIEW_SIZE / 2. * aspectRatio, 
@@ -62,7 +63,7 @@ void onWindowResized(unsigned int width, unsigned int height)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-int main(int argc, char** argv) 
+int main (int argc, char** argv) 
 {
     // Initialisation de la bibliothèque glut
 
@@ -132,9 +133,10 @@ int main(int argc, char** argv)
     int currentPerso = 0;
     int nbPersos;
 
-    Platform listedesblocs[100]; 
+    Platform listedesblocs[100];
     Goal listedesgoals[100];
     Perso listedespersos[100];
+    Quadtree quadtree;
 
     bool firstloop = true;
 
@@ -368,7 +370,7 @@ int main(int argc, char** argv)
 
 
         //Gestion des collisions et déplacements
-        collision(nbPersos, listedespersos, nbBlocs, listedesblocs, elapsedTime);
+        collision(nbPersos, listedespersos, nbBlocs, listedesblocs, elapsedTime, quadtree, currentPerso);
         listedespersos[currentPerso].move(elapsedTime);
 
         if(!checkGround(listedespersos[currentPerso],nbBlocs,listedesblocs))

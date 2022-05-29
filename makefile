@@ -18,7 +18,7 @@ all : $(OBJ_FILES)
 
 comp : $(OBJ_FILES)
 	@mkdir -p $(BIN_DIR)/
-	$(CC) -o $(BIN_DIR)/$(EXEC_BIN) $(OBJ_FILES) $(LDFLAGS) $(LDFLAGS)
+	$(CC) -o $(BIN_DIR)/$(EXEC_BIN) $(OBJ_FILES) $(LDFLAGS)
 
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
@@ -30,7 +30,7 @@ exec : $(OBJ_FILES)
 
 twa : $(OBJ_FILES)
 	@mkdir -p $(BIN_DIR)/
-	$(CC) -o $(BIN_DIR)/$(EXEC_BIN) $(OBJ_FILES) $(LDFLAGS) $(LDFLAGS)
+	$(CC) -o $(BIN_DIR)/$(EXEC_BIN) $(OBJ_FILES) $(LDFLAGS)
 	./$(BIN_DIR)/$(EXEC_BIN)
 
 
