@@ -76,7 +76,7 @@ Platform listedesblocs[], Goal listedesgoals[],int* currentPerso, bool* firstloo
         }
 
         //CAMERA
-        glTranslated(-listedespersos[*currentPerso].px, -listedespersos[*currentPerso].py, 0);
+        glTranslated(-(listedespersos[*currentPerso].px+(listedespersos[*currentPerso].width/2)), -(listedespersos[*currentPerso].py-(listedespersos[*currentPerso].height/2)), 0);
 
         int b = 0;
 
@@ -126,17 +126,20 @@ Platform listedesblocs[], Goal listedesgoals[],int* currentPerso, bool* firstloo
         if (*firstloop == true) {
             *currentPerso=0;
             int p = 0;
-            listedespersos[p] = createPerso(-140, -250, 0, 0, 50, 50, createColor(1, 0, 0)); 
+            listedespersos[p] = createPerso(-900, -420, 0, 0, 60, 60, createColor(1, 0, 1)); 
             drawPerso(listedespersos[p]); 
             p++;   
-            listedespersos[p] = createPerso(100, 0, 0, 0, 50, 100, createColor(0, 255, 0)); 
+            listedespersos[p] = createPerso(-760, -360, 0, 0, 120, 60, createColor(1, 1, 0)); 
+            drawPerso(listedespersos[p]); 
+            p++;
+            listedespersos[p] = createPerso(-900, -175, 0, 0, 25, 400, createColor(0, 0, 1)); 
             drawPerso(listedespersos[p]); 
             p++;
             *nbPersos = p;
         }
         
         //CAMERA
-        glTranslated(-listedespersos[*currentPerso].px, -listedespersos[*currentPerso].py, 0);
+        glTranslated(-(listedespersos[*currentPerso].px+(listedespersos[*currentPerso].width/2)), -(listedespersos[*currentPerso].py-(listedespersos[*currentPerso].height/2)), 0);
 
         int b = 0;
 
@@ -145,19 +148,31 @@ Platform listedesblocs[], Goal listedesgoals[],int* currentPerso, bool* firstloo
 
         //BORDS
         //Bord bas
-        listedesblocs[b] = createPlatform(createPoint(-640, -300, 0), createVector(1280, 60, 0)); b++;
+        listedesblocs[b] = createPlatform(createPoint(-960, -480, 0), createVector(1920, 60, 0)); b++;
         //Bord gauche
-        listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(60, 720, 0)); b++;
+        listedesblocs[b] = createPlatform(createPoint(-960, 540, 0), createVector(60, 1080, 0)); b++;
         //Bord droit
-        listedesblocs[b] = createPlatform(createPoint(580, 360, 0), createVector(60, 720, 0)); b++;
+        listedesblocs[b] = createPlatform(createPoint(900, 540, 0), createVector(60, 1080, 0)); b++;
         //Bord haut
-        listedesblocs[b] = createPlatform(createPoint(-640, 360, 0), createVector(1280, 60, 0)); b++;
+        listedesblocs[b] = createPlatform(createPoint(-960, 540, 0), createVector(1920, 60, 0)); b++;
         
         //PLATEFORMES
-        //Plateforme bas droite
-        listedesblocs[b] = createPlatform(createPoint(-50, -100, 0), createVector(100, 100, 0)); b++;
-        //Plateforme haut gauche
-        listedesblocs[b] = createPlatform(createPoint(-300, 220, 0), createVector(70, 130, 0)); b++;
+        // plateformes au départ du perso bleu
+        listedesblocs[b] = createPlatform(createPoint(-900, -200, 0), createVector(450, 50, 0)); b++;
+        listedesblocs[b] = createPlatform(createPoint(-900, 120, 0), createVector(180, 295, 0)); b++;
+        // escalier
+        printf("%f\n", listedespersos[*currentPerso].py);
+        listedesblocs[b] = createPlatform(createPoint(-350, -350, 0), createVector(100, 100, 0)); b++;
+        listedesblocs[b] = createPlatform(createPoint(-250, -250, 0), createVector(100, 200, 0)); b++;
+        listedesblocs[b] = createPlatform(createPoint(-150, -150, 0), createVector(100, 300, 0)); b++;
+        listedesblocs[b] = createPlatform(createPoint(-50, -50, 0), createVector(100, 400, 0)); b++;
+        listedesblocs[b] = createPlatform(createPoint(50, -250, 0), createVector(100, 200, 0)); b++;
+        // plateforme où il y a l'arrivée du violet
+        listedesblocs[b] = createPlatform(createPoint(-900, 170, 0), createVector(180, 50, 0)); b++;
+        listedesblocs[b] = createPlatform(createPoint(-900, 480, 0), createVector(120, 240, 0)); b++;
+        // plateformes où il y l'arrivée du jaune
+        listedesblocs[b] = createPlatform(createPoint(720, 170, 0), createVector(110, 650, 0)); b++;
+        listedesblocs[b] = createPlatform(createPoint(830, 0, 0), createVector(70, 480, 0)); b++;
        
         //Transforme le personnage non joué en plateforme
         for (int i = 0; i < *nbPersos; i++) {
@@ -175,8 +190,9 @@ Platform listedesblocs[], Goal listedesgoals[],int* currentPerso, bool* firstloo
 
         //OBJECTIFS
         int g = 0;
-        listedesgoals[g] = createGoal(listedespersos[g], createPoint(-290, 270, 0), createVector(listedespersos[g].width, listedespersos[g].height, 0)); g++;
-        listedesgoals[g] = createGoal(listedespersos[g], createPoint(140, -250, 0), createVector(listedespersos[g].width, listedespersos[g].height, 0)); g++;
+        listedesgoals[g] = createGoal(listedespersos[g], createPoint(-900, 230, 0), createVector(listedespersos[g].width, listedespersos[g].height, 0)); g++;
+        listedesgoals[g] = createGoal(listedespersos[g], createPoint(840, 120, 0), createVector(listedespersos[g].width, listedespersos[g].height, 0)); g++;
+        listedesgoals[g] = createGoal(listedespersos[g], createPoint(-900, -455, 0), createVector(listedespersos[g].width, listedespersos[g].height, 0)); g++;
         
     }
 
