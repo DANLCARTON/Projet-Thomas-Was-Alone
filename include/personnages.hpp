@@ -2,6 +2,7 @@
 #define PERSONNAGES_HPP
 
 #include "colors.hpp"
+#include "personnages.hpp"
 #include <SDL2/SDL.h>
 
 typedef struct perso

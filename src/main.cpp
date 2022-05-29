@@ -298,7 +298,7 @@ int main(int argc, char** argv)
                             level=0;
                             break;
                         case 49: // 1
-                            if (level <= 0)
+                            if (level <= 0) 
                             {
                                 level = 1;
                                 firstloop = true;
@@ -314,12 +314,12 @@ int main(int argc, char** argv)
                         case 50: //2
                             if (level <= 0)
                             {
-                                level = 2;
+                                level=2;
                                 firstloop = true;
                             }
                             break;
                         case 1073741914: // pav. num. 2
-                            if (level <= 0)
+                            if (level <= 0)                            
                             {
                                 level = 2;
                                 firstloop = true;

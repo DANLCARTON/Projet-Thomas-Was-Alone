@@ -1,210 +1,336 @@
-/* #include <SDL2/SDL.h>
+#include <SDL2/SDL.h>
+#include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <GL/glew.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-/* Dimensions initiales et titre de la fenetre
-static const unsigned int WINDOW_WIDTH = 800;
-static const unsigned int WINDOW_HEIGHT = 600;
-static const char WINDOW_TITLE[] = "quad_tree";
-
-/* Espace fenetre virtuelle 
-static const float GL_VIEW_SIZE = 100;
-
-/* Nombre minimal de millisecondes separant le rendu de deux images
-static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
+#include "../include/geometry.hpp"
+#include "../include/quad_tree.hpp"
+#include "../include/shape.hpp"
+#include "../include/personnages.hpp"
 
 
+Map createMap (Point3D pointHG, Vector3D taille)
+{
+    Map map;
+    map.x = pointHG.x;
+    map.y = pointHG.y;
+    map.w = taille.x;
+    map.h = taille.y;
+    return map;
+}
 
-void onWindowResized(unsigned int width, unsigned int height)
-{ 
-    float aspectRatio = width / (float) height;
+Quadtree create_QuadTree (Map map)
+{
+    Quadtree quadtree;
 
-    glViewport(0, 0, width, height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    if( aspectRatio > 1) 
+    quadtree.qtx = map.x;
+    quadtree.qty = map.y;
+    quadtree.qtw = map.w;
+    quadtree.qth = map.h;
+
+    quadtree.northwest_child->qtx = map.x;
+    quadtree.northwest_child->qty = map.y;
+    quadtree.northwest_child->qtw = map.w / 2;  
+    quadtree.northwest_child->qth = map.h / 2;
+    
+    quadtree.northeast_child->qtx = map.x + map.w / 2;
+    quadtree.northeast_child->qty = map.y;
+    quadtree.northeast_child->qtw = map.w / 2;  
+    quadtree.northeast_child->qth = map.h / 2;
+    
+    quadtree.southwest_child->qtx = map.x;
+    quadtree.southwest_child->qty = map.y / 2;
+    quadtree.southwest_child->qtw = map.w / 2;  
+    quadtree.southwest_child->qth = map.h / 2;
+    
+    quadtree.southeast_child->qtx = map.x + map.w / 2;
+    quadtree.southeast_child->qty = map.y / 2;
+    quadtree.southeast_child->qtw = map.w / 2;  
+    quadtree.southeast_child->qth = map.h / 2;
+
+    quadtree.parent->qtx = NULL;
+    quadtree.parent->qty = NULL;
+    quadtree.parent->qtw = NULL;
+    quadtree.parent->qth = NULL;
+
+    return quadtree;
+}
+
+// return True if the node is a leaf (it has no children)
+bool is_leaf (Quadtree quadtree)
+{
+    if (quadtree.northwest_child == nullptr && quadtree.northeast_child == nullptr && quadtree.southwest_child == nullptr && quadtree.southeast_child == nullptr)
     {
-        gluOrtho2D(
-        -GL_VIEW_SIZE / 2. * aspectRatio, GL_VIEW_SIZE / 2. * aspectRatio, 
-        -GL_VIEW_SIZE / 2., GL_VIEW_SIZE / 2.);
+        return true;
     }
     else
     {
-        gluOrtho2D(
-        -GL_VIEW_SIZE / 2., GL_VIEW_SIZE / 2.,
-        -GL_VIEW_SIZE / 2. / aspectRatio, GL_VIEW_SIZE / 2. / aspectRatio);
+        return false;
     }
 }
 
-void drawSquare(int filled) 
+// determine la zone dans laquelle se situe la feuille
+Map zoneLeaf (Map map)
 {
-    if(filled) 
+    Quadtree quadtree = create_QuadTree (map);
+
+    if (is_leaf (quadtree) == false)
     {
-        glBegin(GL_TRIANGLE_FAN);
-        glVertex2f(0.0, 0.0);
+        return map;
+    }
+    else
+    {
+        quadtree.qtx = map.x;
+        quadtree.qty = map.y;
+        quadtree.qtw = map.w;
+        quadtree.qth = map.h;
+
+        return map;
+    }
+}
+
+
+bool DetectePersoInLeaf (const Perso perso, Quadtree quadtree)
+{
+    if (is_leaf (quadtree) == false)
+    {
+        return false;
     }
     else 
     {
-        glBegin(GL_LINE_STRIP);
+        if ((perso.px + perso.width > quadtree.qtx || perso.px <= quadtree.qtx + quadtree.qtw) && (perso.py - perso.height <= quadtree.qty || perso.py >= quadtree.qty - quadtree.qth))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
+
+
+// trouve le nombre de bloc dans la feuille
+int BlocsInLeaf(Platform listedesblocs[], Quadtree quadtree, const int nbBlocs)
+{
+    if (is_leaf (quadtree) == false)
+    {
+        return -1;
+    }
+    else
+    {
+        int BlocL = 0;
+        for (int i = 0; i < nbBlocs; i++)
+        {
+            if ((listedesblocs[i].position.x + listedesblocs[i].size.x >= quadtree.qtx || listedesblocs[i].position.x <= quadtree.qtx + quadtree.qtw) && (listedesblocs[i].position.y - listedesblocs[i].size.y <= quadtree.qty || listedesblocs[i].position.y >= quadtree.qty - quadtree.qth))
+            {
+                BlocL ++;
+            }
+        }
+        return BlocL;
     }
 
-    glVertex2f( 0.5 , -0.5);
-    glVertex2f( 0.5 , 0.5);
-    glVertex2f( -0.5 , 0.5);
-    glVertex2f( -0.5 , -0.5);
-    glVertex2f( 0.5 , -0.5);
+}
 
-    glEnd();
-} 
-*/
 
-// void tree_map (int width_map, int height_map)
+
+int nbCollisionInLeaf(Platform listedesblocs[], Quadtree quadtree, const int nbBlocs, const int nbPersos, Perso listedespersos[])
+{
+    if (is_leaf (quadtree) == false)
+    {
+        return -1;
+    }
+    else
+    {
+        // maximun 4 * BlocsInLeaf
+        int CollisionL = 0;
+        for (int i = 0; i < BlocsInLeaf(listedesblocs, quadtree, nbBlocs); i++)
+        {
+            if (listedesblocs[i].position.x > quadtree.qtx && listedesblocs[i].position.x + listedesblocs[i].size.x < quadtree.qtx + quadtree.qtw && listedesblocs[i].position.y < quadtree.qty && listedesblocs[i].position.y - listedesblocs[i].size.y > quadtree.qty - quadtree.qth)
+            {
+                CollisionL += 4; // problème du placement du bloc par rapport au sol et au plafond donc potentiellement 3 dans certains cas
+            }
+
+            if (listedesblocs[i].position.x > quadtree.qtx && listedesblocs[i].position.x + listedesblocs[i].size.x < quadtree.qtx + quadtree.qtw && (listedesblocs[i].position.y - listedesblocs[i].size.y < quadtree.qty || listedesblocs[i].position.y > quadtree.qty - quadtree.qth) || (listedesblocs[i].position.y < quadtree.qty && listedesblocs[i].position.y - listedesblocs[i].size.y > quadtree.qty - quadtree.qth) && (listedesblocs[i].position.x + listedesblocs[i].size.x > quadtree.qtx || listedesblocs[i].position.x < quadtree.qtx + quadtree.qtw))
+            {
+                CollisionL += 3; // problème du placement du bloc par rapport au sol et au plafond donc potentiellement 2 dans certains cas
+            }
+
+            if ((listedesblocs[i].position.x < quadtree.qtx && listedesblocs[i].position.x + listedesblocs[i].size.x > quadtree.qtx && listedesblocs[i].position.y > quadtree.qty && listedesblocs[i].position.y - listedesblocs[i].size.y < quadtree.qty) || (listedesblocs[i].position.x < quadtree.qtx + quadtree.qtw && listedesblocs[i].position.x + listedesblocs[i].size.x > quadtree.qtx + quadtree.qtw && listedesblocs[i].position.y > quadtree.qty && listedesblocs[i].position.y - listedesblocs[i].size.y < quadtree.qty) || (listedesblocs[i].position.x < quadtree.qtx && listedesblocs[i].position.x + listedesblocs[i].size.x > quadtree.qtx && listedesblocs[i].position.y > quadtree.qty - quadtree.qth && listedesblocs[i].position.y - listedesblocs[i].size.y < quadtree.qty - quadtree.qth) || (listedesblocs[i].position.x < quadtree.qtx + quadtree.qtw && listedesblocs[i].position.x + listedesblocs[i].size.x > quadtree.qtx + quadtree.qtw && listedesblocs[i].position.y > quadtree.qty - quadtree.qth && listedesblocs[i].position.y - listedesblocs[i].size.y < quadtree.qty - quadtree.qth))
+            {
+                CollisionL += 2; // ici pas de soucis c'est 2 pas de doute
+            }
+
+            if ((listedesblocs[i].position.x + listedesblocs[i].size.x == quadtree.qtx) || (listedesblocs[i].position.x == quadtree.qtx + quadtree.qtw) || (listedesblocs[i].position.y - listedesblocs[i].size.y == quadtree.qty) || (listedesblocs[i].position.y == quadtree.qty - quadtree.qth))
+            {
+                CollisionL ++ ;
+            }
+        }
+        for (int n = 0; n < nbPersos; n++)
+        {
+            Perso* perso=&listedespersos[n];
+
+            if (perso[n].px > quadtree.qtx && perso[n].px + perso[n].width < quadtree.qtx + quadtree.qtw && perso[n].py < quadtree.qty && perso[n].py - perso[n].height > quadtree.qty - quadtree.qth)
+            {
+                CollisionL += 4; // problème du placement du bloc par rapport au sol et au plafond donc potentiellement 3 dans certains cas
+            }
+
+            if (perso[n].px > quadtree.qtx && perso[n].px + perso[n].width < quadtree.qtx + quadtree.qtw && (perso[n].py - perso[n].height < quadtree.qty || perso[n].py > quadtree.qty - quadtree.qth) || (perso[n].py < quadtree.qty && perso[n].py - perso[n].height > quadtree.qty - quadtree.qth) && (perso[n].px+ perso[n].width > quadtree.qtx || perso[n].px < quadtree.qtx + quadtree.qtw))
+            {
+                CollisionL += 3; // problème du placement du bloc par rapport au sol et au plafond donc potentiellement 2 dans certains cas
+            }
+
+            if ((perso[n].px < quadtree.qtx && perso[n].px + perso[n].width > quadtree.qtx && perso[n].py > quadtree.qty && perso[n].py - perso[n].height < quadtree.qty) || (perso[n].px < quadtree.qtx + quadtree.qtw && perso[n].px + perso[n].width > quadtree.qtx + quadtree.qtw && perso[n].py > quadtree.qty && perso[n].py - perso[n].height < quadtree.qty) || (perso[n].px < quadtree.qtx && perso[n].px + perso[n].width > quadtree.qtx && perso[n].py > quadtree.qty - quadtree.qth && perso[n].py - perso[n].height < quadtree.qty - quadtree.qth) || (perso[n].px < quadtree.qtx + quadtree.qtw && perso[n].px + perso[n].width > quadtree.qtx + quadtree.qtw && perso[n].py > quadtree.qty - quadtree.qth && perso[n].py - perso[n].height < quadtree.qty - quadtree.qth))
+            {
+                CollisionL += 2; // ici pas de soucis c'est 2 pas de doute
+            }
+
+            if (perso[n].px + perso[n].width == quadtree.qtx || perso[n].px == quadtree.qtx + quadtree.qtw || perso[n].py - perso[n].height == quadtree.qty || perso[n].py == quadtree.qty - quadtree.qth)
+            {
+                CollisionL ++;
+            }
+        }
+        return CollisionL;
+    }
+}
+
+
+//void AppliqueQuadTree (Map map, Platform listedesblocs[], const Perso perso, const int nbBlocs, const int nbPersos)
+//{
+    //Quadtree quadtree = create_QuadTree (map);
+    //nbCollisionInLeaf(listedesblocs, quadtree, nbBlocs, nbPersos, listedespersos);
+//
+//}
+//
+
+
+// Quadtree *new_quad_tree(int x, int y)
 // {
+//     Quadtree *tr = malloc(sizeof(*tr));
 
+//     if (tr == NULL)
+//     {
+//         fprintf(stderr, "Erreur allocation.\n");
+//         exit(EXIT_FAILURE);
+//     }
+
+//     else
+//     {
+//         tr.qtx = x;
+//         tr.qty = y;
+//         tr->northwest_child = NULL;
+//         tr->northeast_child = NULL;
+//         tr->southwest_child = NULL;
+//         tr->southeast_child = NULL;
+//         tr->parent = NULL;  
+//     }
+    
+//     return tr;
 // }
 
-// int main(int argc, char** argv) 
+
+// void clean_tree (Quadtree *tr)
 // {
-//     /* Initialisation de la SDL */
-//     if(SDL_Init(SDL_INIT_VIDEO) < 0) 
+//     if ( tr == NULL)
 //     {
-//         const char* error = SDL_GetError();
-//         fprintf(
-//             stderr, 
-//             "Erreur lors de l'intialisation de la SDL : %s\n", error);
-
-//         SDL_Quit();
-//         return EXIT_FAILURE;
+//         return;
 //     }
-	
-//     /* Ouverture d'une fenetre et creation d'un contexte OpenGL */
+//     clean_tree(tr->northwest_child);
+//     clean_tree(tr->northeast_child);
+//     clean_tree(tr->southwest_child);
+//     clean_tree(tr->southeast_child);
+//     free(tr);
+// }
 
-//     SDL_Window* window;
+
+// Quadtree *join_tree(Quadtree *northwest_child, Quadtree *northeast_child, Quadtree *southwest_child, Quadtree southeast_child, int node)
+// {
+//     Quadtree *tr = new_quad_tree(node);
+
+//     tr->northwest_child = northwest_child;
+//     tr->northeast_child = northeast_child;
+//     tr->southwest_child = southwest_child;
+//     tr->southeast_child = southeast_child;
+
+//     if (northwest_child != NULL)
 //     {
-//         window = SDL_CreateWindow(
-//         WINDOW_TITLE,
-//         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-//         WINDOW_WIDTH, WINDOW_HEIGHT,
-//         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
-
-//         if(NULL == window) 
-//         {
-//             const char* error = SDL_GetError();
-//             fprintf(stderr, "Erreur lors de la creation de la fenetre : %s\n", error);
-//             SDL_Quit();
-//             return EXIT_FAILURE;
-//         }
+//         northwest_child->parent = tr;
 //     }
-    
-//     SDL_GLContext context;
+//     if (northeast_child != NULL)
 //     {
-//             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-//             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-
-//             SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-//         context = SDL_GL_CreateContext(window);
-    
-//         if(NULL == context) 
-//         {
-//             const char* error = SDL_GetError();
-//             fprintf(stderr, "Erreur lors de la creation du contexte OpenGL : %s\n", error);
-//             SDL_DestroyWindow(window);
-//             SDL_Quit();
-//             return EXIT_FAILURE;
-//         }
-//     }    
-  
-//     // onWindowResized(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-  
-//     /* Boucle principale */
-//     int loop = 1;
-//     GLuint forme = GL_POINTS;
-//     while(loop) 
+//         northeast_child->parent = tr;
+//     }
+//     if (southeast_child != NULL)
 //     {
-//         /* Recuperation du temps au debut de la boucle */
-//         Uint32 startTime = SDL_GetTicks();
-        
-//         /* Placer ici le code de dessin */
-//         glClear(GL_COLOR_BUFFER_BIT);
-//         glMatrixMode(GL_MODELVIEW);
-//         glLoadIdentity();
+//         southwest_child->parent = tr;
+//     }
+//     if (southeast_child != NULL)
+//     {
+//         southesat_child->parent = tr;
+//     }
+//     return tr;
+// }
 
-//         drawSquare(1);
-
-
-//         /* Echange du front et du back buffer : mise a jour de la fenetre */
-//         SDL_GL_SwapWindow(window);
-        
-//         /* Boucle traitant les evenements */
-//         SDL_Event e;
-//         while (SDL_PollEvent(&e)) 
-//         {
-//             /* L'utilisateur ferme la fenetre : */
-// 			if (e.type == SDL_QUIT) 
-// 			{
-// 				loop = 0;
-// 				break;
-// 			}
-		
-// 			if (e.type == SDL_KEYDOWN && (e.key.keysym.sym == SDLK_q || e.key.keysym.sym == SDLK_ESCAPE))
-// 			{
-// 				loop = 0; 
-// 				break;
-// 			}
-            
-//             switch(e.type) 
-//             {
-//                 case SDL_WINDOWEVENT:
-//                     switch(e.window.event) 
-//                     {
-//                         /* Redimensionnement fenetre */
-//                         case SDL_WINDOWEVENT_RESIZED:
-//                             onWindowResized(e.window.data1, e.window.data2);                
-//                             break;
-
-//                         default:
-//                             break; 
-//                     }
-//                     break;
-
-                
-//                 /* Touche clavier */
-//                 case SDL_KEYDOWN:
-//                     printf("touche pressee (code = %d)\n", e.key.keysym.sym);
-//                     if (forme == GL_POINTS)
-//                     {
-//                         forme = GL_LINE_LOOP;
-//                         break;
-//                     }
-//                     else
-//                     {
-//                         forme = GL_POINTS;
-//                         break;
-//                     }
-                    
-//                 default:
-//                     break;
-//             }
-//         }
-
-//         /* Calcul du temps ecoule */
-//         Uint32 elapsedTime = SDL_GetTicks() - startTime;
-//         /* Si trop peu de temps s'est ecoule, on met en pause le programme */
-//         if(elapsedTime < FRAMERATE_MILLISECONDS) 
-//         {
-//             SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
-//         }
+// void print_tree (Quadtree *tr)
+// {
+//     if (tr == NULL)
+//     {
+//         return;
 //     }
 
-//     /* Liberation des ressources associees a la SDL */ 
-//     SDL_GL_DeleteContext(context);
-//     SDL_DestroyWindow(window);
-//     SDL_Quit();
-    
-//     return EXIT_SUCCESS;
+//     if (tr->parent != NULL)
+//     {
+//         printf("(%d) -> %d\n"), tr->parent->value, tr->value);    
+//     }
+//     else
+//     {
+//         printf("(%d)\n", tr->value)
+//     }
+
+//     if (tr->northwest_child != NULL)
+//     {
+//         print_tree (tr->northwest_child);
+//     }
+//     if (tr->northeast_child != NULL)
+//     {
+//         print_tree (tr->northeast_child);
+//     }
+//     if (tr->southwest_child != NULL)
+//     {
+//         print_tree (tr->southwest_child);
+//         tr->
+//     }
+//     if (tr->southeast_child != NULL)
+//     {
+//         print_tree (tr->southeast_child);
+// }
+
+
+// int nodesCount (Quadtree *tr)
+// {
+//     if (tr->northwest_child != NULL && tr->northeast_child != NULL && tr->southwest_child != NULL && tr->southeast_child != NULL)
+//     {
+//         return (tr->northwest_child->nodesCount() + tr->northeast_child->nodesCount() + tr->southwest_child->nodesCount() + tr->southeast_child->nodesCount() + 1); 
+//     }
+//     else if (tr->northwest_child != NULL)
+//     {
+//         return (tr->northwest_child->nodesCount() + 1);
+//     }
+//     else if (tr->northeast_child != NULL)
+//     {
+//         return (tr->northeast_child->nodesCount() + 1);
+//     }
+//     else if (tr->southwest_child != NULL)
+//     {
+//         return (tr->southwest_child->nodesCount() + 1);
+//     }
+//     else if (tr->southeast_child != NULL)
+//     {
+//         return (tr->southeast_child->nodesCount() + 1);
+//     }
+//     else
+//     {
+//         return 1;
+//     }
 // }
